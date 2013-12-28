@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Install system dependencies
+cat requirements.system | xargs sudo apt-get install -y
+
+# TODO: something about rvm
+
+# Install NodeJS requirements
+npm install
+
+# Install Ruby requirements
+gem install

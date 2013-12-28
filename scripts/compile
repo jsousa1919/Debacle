@@ -1,0 +1,3 @@
+#!/bin/bash
+
+coffeelint ../templaces/coffee/ && coffee -c -o ../public/js/ ../templates/coffee/ && compass ../

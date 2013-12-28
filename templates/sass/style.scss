@@ -1,0 +1,26 @@
+body {
+  color: rgba(40,40,40,0.8);
+}
+.centered {
+  float: none;
+  margin: auto;
+}
+.box {
+  border-radius: 5px;
+  box-shadow: 0 0 3px 3px rgba(20,20,20,0.7);
+}
+.neutral-color {
+  background-color: rgba(200,50,200,0.5);
+}
+.side-a-color {
+  background-color: rgba(200,50,50,0.5);
+}
+.side-b-color {
+  background-color: rgba(20,50,200,0.5);
+}
+.padded2 {
+  padding: 2em;
+}
+.row {
+  margin-bottom: 2em;
+}
