@@ -31,11 +31,27 @@ body {
 }
 
 /* line 23, ../../templates/sass/style.scss */
+.padded1 {
+  padding: 1em;
+}
+
+/* I'm sure this can be created progrmmatically with sass */
+/* line 26, ../../templates/sass/style.scss */
 .padded2 {
   padding: 2em;
 }
 
-/* line 26, ../../templates/sass/style.scss */
+/* line 29, ../../templates/sass/style.scss */
 .row {
   margin-bottom: 2em;
+}
+
+/* line 32, ../../templates/sass/style.scss */
+.faded {
+  color: rgba(20, 20, 20, 0.7);
+}
+
+/* line 35, ../../templates/sass/style.scss */
+.black {
+  color: black;
 }

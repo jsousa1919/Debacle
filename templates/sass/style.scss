@@ -20,9 +20,18 @@ body {
 .side-b-color {
   background-color: $right-color;
 }
+.padded1 {
+  padding: 1em;
+} /* I'm sure this can be created progrmmatically with sass */
 .padded2 {
   padding: 2em;
 }
 .row {
   margin-bottom: 2em;
+}
+.faded {
+  color: $grey;
+}
+.black {
+  color: black;
 }

@@ -1,4 +1,4 @@
-var app = angular.module('Debacle', []);
+var app = angular.module('Debacle', ['ngSanitize']);
 app.factory('DataService', function () {
   return {
     debate: {
@@ -11,7 +11,7 @@ app.factory('DataService', function () {
               id: 1,
               author: 'Justin',
               date: '12/29/13',
-              text: 'It\'s cool and stuff'
+              text: 'It\'s cool and stuff<br/>I\'m really cool<br/>because I\'m longer'
             },
             {
               id: 2,

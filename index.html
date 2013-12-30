@@ -23,6 +23,7 @@
     <!-- Eventually include a js file from rails to pass over all variables to frontend -->
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-sanitize.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="public/js/app.js"></script>
@@ -76,18 +77,37 @@
       </div>
       <div class="row">
         <div class="col-md-10 centered">
-          <div class="col-md-5 box text-center side-a-color">
-            <h3 id="side-a-name">Python</h3>
+          <div class="col-md-5">
+            <div class="row box text-center side-a-color">
+              <h3 id="side-a-name">Python</h3>
+            </div>
+            <div class="row box padded2 side-a-color" ng-repeat="opinion in debate.sides[0].opinions">
+              <div class="padded1">
+                <b class="black">{{ opinion.author }}</b>
+                -
+                <i class="faded">posted {{ opinion.date }}</i>
+              </div>
+              <div ng-bind-html="opinion.text"></div>
+            </div>
           </div>
           <div class="col-md-2 text-center">
             <h1 style="color: red; vertical-align: middle; display: inline; line-height: 1.5em; font-family: matura mt script capitals;">vs</h1>
           </div>
-          <div class="col-md-5 box text-center side-b-color">
-            <h3 id="side-b-name">Ruby</h3>
+          <div class="col-md-5">
+            <div class="row box text-center side-b-color">
+              <h3 id="side-b-name">Ruby</h3>
+            </div>
+            <div class="row box padded2 side-b-color" ng-repeat="opinion in debate.sides[1].opinions">
+              <div class="padded1">
+                <b class="black">{{ opinion.author }}</b>
+                -
+                <i class="faded">posted {{ opinion.date }}</i>
+              </div>
+              <div ng-bind-html="opinion.text"></div>
+            </div>
           </div>
         </div>
       </div>
-          
     </div>
   </body>
 </html>
