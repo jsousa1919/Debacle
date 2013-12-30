@@ -1,41 +1,41 @@
-/* line 1, ../../templates/sass/style.scss */
+/* line 3, ../../templates/sass/style.scss */
 body {
   color: rgba(40, 40, 40, 0.8);
 }
 
-/* line 4, ../../templates/sass/style.scss */
+/* line 6, ../../templates/sass/style.scss */
 .centered {
   float: none;
   margin: auto;
 }
 
-/* line 8, ../../templates/sass/style.scss */
+/* line 10, ../../templates/sass/style.scss */
 .box {
   border-radius: 5px;
   box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
 }
 
-/* line 12, ../../templates/sass/style.scss */
+/* line 14, ../../templates/sass/style.scss */
 .neutral-color {
   background-color: rgba(200, 50, 200, 0.5);
 }
 
-/* line 15, ../../templates/sass/style.scss */
+/* line 17, ../../templates/sass/style.scss */
 .side-a-color {
   background-color: rgba(200, 50, 50, 0.5);
 }
 
-/* line 18, ../../templates/sass/style.scss */
+/* line 20, ../../templates/sass/style.scss */
 .side-b-color {
   background-color: rgba(20, 50, 200, 0.5);
 }
 
-/* line 21, ../../templates/sass/style.scss */
+/* line 23, ../../templates/sass/style.scss */
 .padded2 {
   padding: 2em;
 }
 
-/* line 24, ../../templates/sass/style.scss */
+/* line 26, ../../templates/sass/style.scss */
 .row {
   margin-bottom: 2em;
 }
