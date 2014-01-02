@@ -1,57 +1,77 @@
-/* line 3, ../../templates/sass/style.scss */
+/* line 5, ../../templates/sass/style.sass */
 body {
   color: rgba(40, 40, 40, 0.8);
 }
 
-/* line 6, ../../templates/sass/style.scss */
+/* line 8, ../../templates/sass/style.sass */
 .centered {
   float: none;
   margin: auto;
 }
 
-/* line 10, ../../templates/sass/style.scss */
+/* line 12, ../../templates/sass/style.sass */
 .box {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
   border-radius: 5px;
+  -webkit-box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
+  -moz-box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
   box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
 }
 
-/* line 14, ../../templates/sass/style.scss */
+/* line 16, ../../templates/sass/style.sass */
 .neutral-color {
   background-color: rgba(200, 50, 200, 0.5);
 }
 
-/* line 17, ../../templates/sass/style.scss */
+/* line 19, ../../templates/sass/style.sass */
 .side-a-color {
   background-color: rgba(200, 50, 50, 0.5);
 }
 
-/* line 20, ../../templates/sass/style.scss */
+/* line 22, ../../templates/sass/style.sass */
 .side-b-color {
   background-color: rgba(20, 50, 200, 0.5);
 }
 
-/* line 23, ../../templates/sass/style.scss */
+/* line 26, ../../templates/sass/style.sass */
 .padded1 {
   padding: 1em;
 }
 
-/* I'm sure this can be created progrmmatically with sass */
-/* line 26, ../../templates/sass/style.scss */
+/* line 26, ../../templates/sass/style.sass */
 .padded2 {
   padding: 2em;
 }
 
-/* line 29, ../../templates/sass/style.scss */
+/* line 26, ../../templates/sass/style.sass */
+.padded3 {
+  padding: 3em;
+}
+
+/* line 26, ../../templates/sass/style.sass */
+.padded4 {
+  padding: 4em;
+}
+
+/* line 26, ../../templates/sass/style.sass */
+.padded5 {
+  padding: 5em;
+}
+
+/* line 29, ../../templates/sass/style.sass */
 .row {
   margin-bottom: 2em;
 }
 
-/* line 32, ../../templates/sass/style.scss */
+/* line 32, ../../templates/sass/style.sass */
 .faded {
   color: rgba(20, 20, 20, 0.7);
 }
 
-/* line 35, ../../templates/sass/style.scss */
+/* line 35, ../../templates/sass/style.sass */
 .black {
   color: black;
 }

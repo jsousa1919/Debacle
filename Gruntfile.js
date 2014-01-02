@@ -8,7 +8,7 @@ module.exports = function(grunt) {
  
         // Metadata.
         meta: {
-            scssPath: 'templates/sass/',
+            sassPath: 'templates/sass/',
             cssPath: 'public/css/',
             coffeePath: 'templates/coffee/',
             jsPath: 'public/js/'
@@ -22,8 +22,8 @@ module.exports = function(grunt) {
         compass: {
             dist: {
                   expand: true,
-                  cwd: '<%= meta.scssPath %>',
-                  src: ['{,*/}*.scss'],
+                  cwd: '<%= meta.sassPath %>',
+                  src: ['{,*/}*.sass'],
                   dest: '<%= meta.cssPath %>',
                   ext: '.css'
             }
@@ -31,16 +31,18 @@ module.exports = function(grunt) {
 
         coffee: {
             dist: {
-                files: {
-                    '<%= meta.jsPath %>main.js': '<%= meta.coffeePath %>**/*.coffee'
-                }
+                  expand: true,
+                  cwd: '<%= meta.coffeePath %>',
+                  src: ['{,*/}*.coffee'],
+                  dest: '<%= meta.jsPath %>',
+                  ext: '.js'
             }
         },
  
         watch: {
             scripts: {
                 files: [
-                    '<%= meta.scssPath %>/**/*.scss',
+                    '<%= meta.sassPath %>/**/*.sass',
                     '<%= meta.coffeePath %>/**/*.coffee'
                 ],
                 tasks: ['compass', 'coffee']
