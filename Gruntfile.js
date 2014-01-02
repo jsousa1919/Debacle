@@ -23,7 +23,7 @@ module.exports = function(grunt) {
             dist: {
                   expand: true,
                   cwd: '<%= meta.sassPath %>',
-                  src: ['{,*/}*.sass'],
+                  src: ['{,*/}*.sass', '{,*/}*.scss', '!_*.*'],
                   dest: '<%= meta.cssPath %>',
                   ext: '.css'
             }
@@ -31,11 +31,11 @@ module.exports = function(grunt) {
 
         coffee: {
             dist: {
-                  expand: true,
-                  cwd: '<%= meta.coffeePath %>',
-                  src: ['{,*/}*.coffee'],
-                  dest: '<%= meta.jsPath %>',
-                  ext: '.js'
+                expand: true,
+                cwd: '<%= meta.coffeePath %>',
+                src: ['{,*/}*.coffee'],
+                dest: '<%= meta.jsPath %>',
+                ext: '.js'
             }
         },
  

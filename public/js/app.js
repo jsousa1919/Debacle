@@ -1,4 +1,7 @@
 (function() {
+  var app;
+
+  app = window.app;
 
   app.controller("Main", function($scope, DataService) {
     return $scope.user = DataService.user;
