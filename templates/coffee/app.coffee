@@ -1,3 +1,5 @@
+app = window.app
+
 app.controller "Main", ($scope, DataService) ->
   $scope.user = DataService.user
 
