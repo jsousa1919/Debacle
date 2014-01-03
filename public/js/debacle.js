@@ -1,9 +1,8 @@
 (function() {
-  var app;
 
-  window.app = app = angular.module("Debacle", ["ngSanitize"]);
+  $.app = angular.module("Debacle", ["ngSanitize"]);
 
-  app.factory("DataService", function() {
+  $.app.factory("DataService", function() {
     return {
       debate: {
         description: "Some stuff about how the two \      differ, popular questions, etc...",

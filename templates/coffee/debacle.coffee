@@ -1,5 +1,5 @@
-window.app = app = angular.module("Debacle", ["ngSanitize"])
-app.factory "DataService", ->
+$.app = angular.module("Debacle", ["ngSanitize"])
+$.app.factory "DataService", ->
   debate:
     description: "Some stuff about how the two \
       differ, popular questions, etc..."
