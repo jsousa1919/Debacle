@@ -11,13 +11,11 @@ body {
 
 /* line 12, ../../templates/sass/style.sass */
 .box {
-  -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border-radius: 5px;
-  -webkit-box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
   -moz-box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
+  -webkit-box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
   box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
 }
 

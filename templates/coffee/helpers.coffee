@@ -1,11 +1,11 @@
 window.cssPath = (name) ->
-    "/css/" + name
+  "/css/" + name
 
 window.jsPath = (name) ->
-    "/js/" + name
+  "/js/" + name
 
 window.imgPath = (name) ->
-    "/images/" + name
+  "/images/" + name
 
 window.snippetPath = (name) ->
-    "/snippets/" + name
+  "/snippets/" + name

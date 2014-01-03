@@ -3,35 +3,35 @@
 @import "consts"
 
 body
-    color: $background-color
+  color: $background-color
 
 .centered
-    float: none
-    margin: auto
+  float: none
+  margin: auto
 
 .box
-    @include border-radius(5px)
-    @include box-shadow($shadow)
+  @include border-radius(5px)
+  @include box-shadow($shadow)
 
 .neutral-color
-    background-color: $neutral-color
+  background-color: $neutral-color
 
 .side-a-color
-    background-color: $left-color
+  background-color: $left-color
 
 .side-b-color
-    background-color: $right-color
+  background-color: $right-color
 
 @for $i from 1 through 5
-    .padded#{$i}
-        padding: #{$i}em
+  .padded#{$i}
+    padding: #{$i}em
 
 .row
-    margin-bottom: 2em
+  margin-bottom: 2em
 
 .faded
-    color: $grey
+  color: $grey
 
 .black
-    color: black
+  color: black
 

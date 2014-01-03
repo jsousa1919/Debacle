@@ -26,6 +26,8 @@
     "grunt": "*",
     "grunt-contrib-watch": "*",
     "grunt-contrib-coffee": "*",
-    "grunt-contrib-compass": "*"
+    "grunt-contrib-compass": "*",
+    "grunt-coffeelint": "*",
+    "grunt-shell": "*"
   }
 }

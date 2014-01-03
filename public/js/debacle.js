@@ -6,7 +6,7 @@
   app.factory("DataService", function() {
     return {
       debate: {
-        description: "Some stuff about how the two differ, popular questions, etc...",
+        description: "Some stuff about how the two \      differ, popular questions, etc...",
         sides: [
           {
             name: "Python",
