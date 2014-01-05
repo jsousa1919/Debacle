@@ -34,42 +34,50 @@ body {
   background-color: rgba(20, 50, 200, 0.5);
 }
 
-/* line 26, ../../templates/sass/style.sass */
+/* line 25, ../../templates/sass/style.sass */
+.selected {
+  border: 1px black;
+  -moz-box-shadow: 0 0 5px 5px yellow;
+  -webkit-box-shadow: 0 0 5px 5px yellow;
+  box-shadow: 0 0 5px 5px yellow;
+}
+
+/* line 30, ../../templates/sass/style.sass */
 .padded1 {
   padding: 1em;
 }
 
-/* line 26, ../../templates/sass/style.sass */
+/* line 30, ../../templates/sass/style.sass */
 .padded2 {
   padding: 2em;
 }
 
-/* line 26, ../../templates/sass/style.sass */
+/* line 30, ../../templates/sass/style.sass */
 .padded3 {
   padding: 3em;
 }
 
-/* line 26, ../../templates/sass/style.sass */
+/* line 30, ../../templates/sass/style.sass */
 .padded4 {
   padding: 4em;
 }
 
-/* line 26, ../../templates/sass/style.sass */
+/* line 30, ../../templates/sass/style.sass */
 .padded5 {
   padding: 5em;
 }
 
-/* line 29, ../../templates/sass/style.sass */
+/* line 33, ../../templates/sass/style.sass */
 .row {
   margin-bottom: 2em;
 }
 
-/* line 32, ../../templates/sass/style.sass */
+/* line 36, ../../templates/sass/style.sass */
 .faded {
   color: rgba(20, 20, 20, 0.7);
 }
 
-/* line 35, ../../templates/sass/style.sass */
+/* line 39, ../../templates/sass/style.sass */
 .black {
   color: black;
 }

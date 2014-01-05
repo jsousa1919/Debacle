@@ -6,8 +6,10 @@
     return {
       debate: {
         description: "Some stuff about how the two \      differ, popular questions, etc...",
+        user_choice: 5,
         sides: [
           {
+            id: 5,
             name: "Python",
             opinions: [
               {
@@ -23,6 +25,7 @@
               }
             ]
           }, {
+            id: 6,
             name: "Ruby",
             opinions: [
               {

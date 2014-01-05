@@ -22,6 +22,10 @@ body
 .side-b-color
   background-color: $right-color
 
+.selected
+  border: 1px black
+  @include box-shadow($selected-shadow)
+
 @for $i from 1 through 5
   .padded#{$i}
     padding: #{$i}em

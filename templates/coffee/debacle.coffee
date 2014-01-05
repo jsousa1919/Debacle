@@ -3,7 +3,9 @@ $.app.factory "DataService", ->
   debate:
     description: "Some stuff about how the two \
       differ, popular questions, etc..."
+    user_choice: 5
     sides: [
+      id: 5
       name: "Python"
       opinions: [
         id: 1
@@ -17,6 +19,7 @@ $.app.factory "DataService", ->
         text: "It's cool and stuff"
       ]
     ,
+      id: 6
       name: "Ruby"
       opinions: [
         id: 3
