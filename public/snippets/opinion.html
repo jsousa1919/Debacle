@@ -1,0 +1,8 @@
+<div class="row box padded2 {{classes}}">
+  <div class="padded1">
+    <b class="black">{{ opinion.author }}</b>
+    -
+    <i class="faded">posted {{ opinion.date }}</i>
+  </div>
+  <div ng-bind-html="opinion.text"></div>
+</div>
