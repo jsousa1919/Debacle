@@ -81,3 +81,8 @@ body {
 .black {
   color: black;
 }
+
+/* line 42, ../../templates/sass/style.sass */
+.clickable {
+  cursor: pointer;
+}

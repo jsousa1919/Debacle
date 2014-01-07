@@ -40,7 +40,12 @@ module.exports = function(grunt) {
     },
 
     coffeelint: {
-      app: ['<%= meta.coffeePath %>*.coffee']
+      app: ['<%= meta.coffeePath %>*.coffee'],
+      options: {
+        'max_line_length': {
+          'level': 'ignore'
+        }
+      }
     },
 
     shell: {

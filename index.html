@@ -79,21 +79,11 @@
       </div>
       <div class="row">
         <div class="col-md-10 centered">
-          <div class="col-md-5">
-            <div class="row box text-center side-a-color {{debate.user_choice == debate.sides[0].id && 'selected' || ''}}">
-              <h3 id="side-a-name">{{ debate.sides[0].name }}</h3>
-            </div>
-            <opinion ng-repeat="opinion in debate.sides[0].opinions" object="opinion" classes="side-a-color"></opinion>
-          </div>
+          <side object="debate.sides[active_sides[0]]" classes="side-a-color"></side>
           <div class="col-md-2 text-center">
             <h1 style="color: red; vertical-align: middle; display: inline; line-height: 1.5em; font-family: matura mt script capitals;">vs</h1>
           </div>
-          <div class="col-md-5">
-            <div class="row box text-center side-b-color {{debate.user_choice == debate.sides[1].id && 'selected' || ''}}">
-              <h3 id="side-b-name">{{ debate.sides[1].name }}</h3>
-            </div>
-            <opinion ng-repeat="opinion in debate.sides[1].opinions" object="opinion" classes="side-b-color"></opinion>
-          </div>
+          <side object="debate.sides[active_sides[1]]" classes="side-b-color"></side>
         </div>
       </div>
     </div>

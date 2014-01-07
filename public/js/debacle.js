@@ -6,9 +6,9 @@
     return {
       debate: {
         description: "Some stuff about how the two \      differ, popular questions, etc...",
-        user_choice: 5,
-        sides: [
-          {
+        chosen: 5,
+        sides: {
+          5: {
             id: 5,
             name: "Python",
             opinions: [
@@ -24,7 +24,8 @@
                 text: "It's cool and stuff"
               }
             ]
-          }, {
+          },
+          6: {
             id: 6,
             name: "Ruby",
             opinions: [
@@ -46,8 +47,9 @@
               }
             ]
           }
-        ]
+        }
       },
+      active_sides: [5, 6],
       user: {
         id: 1,
         first_name: "Justin"
