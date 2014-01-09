@@ -119,8 +119,8 @@ $.app.directive 'side', ($rootScope, Backend) ->
         $scope.opine()
 
     controller: ($scope) ->
-      $scope.new = 1000
-      $scope.opinion_order = ['-new', 'editing', '-score']
+      $scope.new = 0
+      $scope.opinion_order = ['new', 'editing', '-score']
   }
 
 

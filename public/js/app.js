@@ -120,8 +120,8 @@
         };
       },
       controller: function($scope) {
-        $scope["new"] = 1000;
-        return $scope.opinion_order = ['-new', 'editing', '-score'];
+        $scope["new"] = 0;
+        return $scope.opinion_order = ['new', 'editing', '-score'];
       }
     };
   });
