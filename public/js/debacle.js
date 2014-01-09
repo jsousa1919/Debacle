@@ -16,11 +16,13 @@
                 id: 1,
                 author: "Justin",
                 date: "12/29/13",
+                score: 3,
                 text: "It's cool and stuff<br/>I'm really cool<br/>because I'm longer"
               }, {
                 id: 2,
                 author: "Einstein",
                 date: "12/29/13",
+                score: 9,
                 text: "It's cool and stuff"
               }
             ]
@@ -33,26 +35,32 @@
                 id: 3,
                 author: "Tom",
                 date: "12/29/13",
+                score: 1,
                 text: "It's cool and stuff"
               }, {
                 id: 4,
                 author: "DaVinci",
                 date: "12/29/13",
+                score: 1,
                 text: "It's cool and stuff"
               }, {
                 id: 5,
                 author: "Tesla",
                 date: "12/29/13",
+                score: 6,
                 text: "It's cool and stuff"
               }
             ]
           }
         }
       },
-      active_sides: [5, 6],
-      user: {
-        id: 1,
-        first_name: "Justin"
+      globals: {
+        active_sides: [5, 6],
+        user: {
+          id: 1,
+          name: "Justin"
+        },
+        date: "01/01/2015"
       }
     };
   });
