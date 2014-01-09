@@ -108,7 +108,8 @@
           $scope.side.opinions.push({
             id: 0,
             author: $rootScope.globals.user.name,
-            editing: true
+            editing: true,
+            "new": $scope["new"]--
           });
           return $scope.digest;
         };
@@ -119,7 +120,8 @@
         };
       },
       controller: function($scope) {
-        return $scope.opinion_order = ['editing', '-score'];
+        $scope["new"] = 1000;
+        return $scope.opinion_order = ['-new', 'editing', '-score'];
       }
     };
   });

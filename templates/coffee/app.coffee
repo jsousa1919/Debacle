@@ -109,6 +109,7 @@ $.app.directive 'side', ($rootScope, Backend) ->
           id: 0
           author: $rootScope.globals.user.name
           editing: true
+          new: $scope.new--
         $scope.digest
 
       $scope.choose = () ->
@@ -118,7 +119,8 @@ $.app.directive 'side', ($rootScope, Backend) ->
         $scope.opine()
 
     controller: ($scope) ->
-      $scope.opinion_order = ['editing', '-score']
+      $scope.new = 1000
+      $scope.opinion_order = ['-new', 'editing', '-score']
   }
 
 
