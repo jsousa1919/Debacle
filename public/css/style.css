@@ -86,3 +86,9 @@ body {
 .clickable {
   cursor: pointer;
 }
+
+/* line 45, ../../templates/sass/style.sass */
+textarea {
+  max-width: 100%;
+  min-height: 10em !important;
+}

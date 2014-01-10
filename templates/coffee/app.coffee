@@ -3,7 +3,7 @@ SIDE_TEMPLATE = """
     <div class="row box text-center clickable {{ classes }} {{ (side.id === $parent.debate.chosen) && 'selected' || '' }}" ng-click="select()">
       <h3>{{ side.name }}</h3>
     </div>
-    <opinion ng-repeat="opinion in side.opinions | orderBy:opinion_order" object="opinion" classes="{{ classes }}"></opinion>
+    <opinion ng-repeat="opinion in side.opinions | orderBy:opinion_order"></opinion>
   </div>
 """ # move to external file
 
@@ -13,88 +13,117 @@ OPINION_TEMPLATE = """
       <b class="black">{{ opinion.author }}</b>
       -
       <i class="faded" ng-show="opinion.date">posted {{ opinion.date }}</i>
+      <a class="pull-right" ng-show="opinion.author_id == $root.globals.user.id && !opinion.editing" ng-click="edit()">Edit</a>
     </div>
-    <div ng-hide="opinion.editing" ng-bind-html="opinion.text"></div>
+    <div ng-hide="opinion.editing" ng-bind-html="opinion.text | nohtml | newlines" style="word-wrap: break-word;"></div>
     <div ng-show="opinion.editing">
-      <textarea ng-model="opinion.text" class="col-md-12"></textarea>
-      <button ng-click="post()">Post</button>
+      <textarea ng-model="opinion.new_text" class="col-md-12"></textarea>
+      <button ng-click="cancel()">Cancel</button>
+      <button ng-click="post()" class="pull-right">Post</button>
     </div>
   </div>
 """ # move to external file when on webserver
 
 
+$.app.filter('newlines', () ->
+  return (text) ->
+    return text.replace(/\n/g, '<br/>')
+)
 
+$.app.filter('nohtml', () ->
+  return (text) ->
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+)
 
-
-$.app.controller 'Main', ($rootScope, DataService) ->
-  $rootScope.globals = DataService.globals
-
-$.app.controller 'Headers', ($scope, DataService) ->
-
-$.app.controller 'Debate', ($scope, DataService) ->
-  $scope.debate = DataService.debate
-  $scope.active_sides = DataService.globals.active_sides
-  $scope.$on 'choose', (event, side) ->
-    $scope.debate.chosen = side.id
-
-$.app.factory 'Backend', ($http, $q) ->
+$.app.factory('Backend', ($http, $q) ->
   return {
     vote: (val) ->
-# TODO when on server return $http.post '/vote', {val: val}
+# TODO when on server return $http.post '/vote', {opinion: opinion, vote: val}
       tmp = $q.defer()
       tmp.resolve(3)
       return tmp.promise
     opine: (opinion) ->
-# TODO when on server return $http.post '/opine', {id: opinion.id, text: opinion.text}
+# TODO when on server return $http.post '/opine', opinion
       tmp = $q.defer()
-      tmp.resolve('01/01/2014')
+      tmp.resolve(
+        date: '01/01/2014'
+        text: opinion.new_text
+      )
       return tmp.promise
   }
+)
 
-$.app.directive 'opinion', (Backend) ->
+$.app.controller('Main', ($rootScope, DataService) ->
+  $rootScope.globals = DataService.globals
+)
+
+$.app.controller('Headers', ($scope, DataService) ->
+)
+
+$.app.controller('Debate', ($scope, DataService) ->
+  $scope.debate = DataService.debate
+  $scope.active_sides = DataService.globals.active_sides
+  $scope.$on 'choose', (event, side) ->
+    $scope.debate.chosen = side.id
+)
+
+$.app.directive('opinion', (Backend, $rootScope) ->
   return {
     restrict: 'E'
     replace: true
     template: OPINION_TEMPLATE
-    scope:
-      opinion: '=object'
-      classes: '@'
+    scope: true
     link: ($scope, element, attrs) ->
       if $scope.opinion.editing
         $(element).hide()
-        $(element).slideDown 'slow'
+        $(element).slideDown('slow') # TODO try to use css animations
         $(element).find('textarea').focus()
 
     controller: ($scope) ->
       $scope.vote = (val) ->
-        Backend.vote(val).then(
+        Backend.vote(opinion, val).then(
           (res) ->
             $scope.opinion.vote = res
           (err) ->
-            console.log 'Vote failed: ' + err
+            console.log('Vote failed: ' + err)
         )
 
-      $scope.post = (val) ->
-# TODO some validation
-        Backend.opine($scope.opinion).then(
-          (res) ->
-            $scope.opinion.editing = undefined
-            $scope.opinion.date = res
-# TODO convert newlines
-          (err) ->
-            console.log "We don't want your stinking opinion crybaby" + err
-        )
+      $scope.post = () ->
+        if $scope.opinion.new_text
+          Backend.opine($scope.opinion).then(
+            (res) ->
+              $scope.opinion.editing = undefined
+              $scope.opinion.date = res.date
+              $scope.opinion.text = res.text
+            (err) ->
+              console.log "We don't want your stinking opinion crybaby" + err
+          )
+
+      $scope.edit = () ->
+        $scope.opinion.new_text = $scope.opinion.text
+        if $scope.opinion.author_id == $rootScope.globals.user.id
+          $scope.opinion.editing = true
+
+      $scope.cancel = () ->
+        $scope.opinion.editing = undefined
+        if not $scope.opinion.id
+          $scope.$emit('remove', $scope.opinion)
+
   }
-
-$.app.directive 'side', ($rootScope, Backend) ->
+)
+$.app.directive('side', ($rootScope, Backend, $parse) ->
   return {
     restrict: 'E'
     replace: true
     template: SIDE_TEMPLATE
-    scope:
-      side: '=object'
-      classes: '@'
+    scope: true
     link: ($scope, element, attrs) ->
+      $scope.side = $scope.$eval(attrs.object) # may need to use $parse to modify root object
+      $scope.classes = attrs.classes
+
       $scope.select = () ->
         if $scope.$parent.debate.chosen == $scope.side.id
           $scope.opine()
@@ -103,10 +132,11 @@ $.app.directive 'side', ($rootScope, Backend) ->
 
       $scope.opine = () ->
         # show new opinion box
-        if (o for o in $scope.side.opinions when o.editing).length
+        if (o for o in $scope.side.opinions when o.editing and not o.id).length
           return
         $scope.side.opinions.push
           id: 0
+          author_id: $rootScope.globals.user.id
           author: $rootScope.globals.user.name
           editing: true
           new: $scope.new--
@@ -114,13 +144,17 @@ $.app.directive 'side', ($rootScope, Backend) ->
 
       $scope.choose = () ->
 # TODO current opinions will be deleted
-        alert "All your current opinions will be EXTERMINATED"
-        $scope.$emit 'choose', $scope.side
+        alert("All your current opinions will be EXTERMINATED")
+        $scope.$emit('choose', $scope.side)
         $scope.opine()
 
     controller: ($scope) ->
       $scope.new = 0
-      $scope.opinion_order = ['new', 'editing', '-score']
-  }
+      $scope.opinion_order = ['new', '-score']
 
+      $scope.$on('remove', (event, opinion) ->
+        $scope.side.opinions.splice($scope.side.opinions.indexOf(opinion), 1)
+      )
+  }
+)
 
