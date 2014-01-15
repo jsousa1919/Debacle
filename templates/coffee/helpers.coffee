@@ -9,3 +9,6 @@ window.imgPath = (name) ->
 
 window.snippetPath = (name) ->
   "/snippets/" + name
+
+window.fail = (msg) ->
+  alert(msg)

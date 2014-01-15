@@ -9,6 +9,7 @@ SIDE_TEMPLATE = """
 
 OPINION_TEMPLATE = """
   <div class="row box padded1 {{classes}}" style="height: 100%">
+    <div class="clickable pull-right" ng-show="opinion.author_id == $root.globals.user.id" ng-click="delete()">X</div>
     <div class="padded1">
       <b class="black">{{ opinion.author }}</b>
       -
@@ -40,17 +41,29 @@ $.app.filter('nohtml', () ->
 
 $.app.factory('Backend', ($http, $q) ->
   return {
-    vote: (val) ->
+    vote: (opinion, val) ->
 # TODO when on server return $http.post '/vote', {opinion: opinion, vote: val}
       tmp = $q.defer()
-      tmp.resolve(3)
+      tmp.resolve(
+        success: true
+        score: 3
+      )
       return tmp.promise
     opine: (opinion) ->
 # TODO when on server return $http.post '/opine', opinion
       tmp = $q.defer()
       tmp.resolve(
+        success: true
         date: '01/01/2014'
         text: opinion.new_text
+      )
+      return tmp.promise
+    delete: (opinion) ->
+# TODO when on server return $http.post '/delete', opinion
+      tmp = $q.defer()
+      tmp.resolve(
+        success: false
+        msg: 'Just an example of something not working'
       )
       return tmp.promise
   }
@@ -86,20 +99,26 @@ $.app.directive('opinion', (Backend, $rootScope) ->
       $scope.vote = (val) ->
         Backend.vote(opinion, val).then(
           (res) ->
-            $scope.opinion.vote = res
+            if res.success
+              $scope.opinion.vote = res
+            else:
+              fail(res.msg)
           (err) ->
-            console.log('Vote failed: ' + err)
+            fail('5 Hundo: ' + err)
         )
 
       $scope.post = () ->
         if $scope.opinion.new_text
           Backend.opine($scope.opinion).then(
             (res) ->
-              $scope.opinion.editing = undefined
-              $scope.opinion.date = res.date
-              $scope.opinion.text = res.text
+              if res.success
+                $scope.opinion.editing = undefined
+                $scope.opinion.date = res.date
+                $scope.opinion.text = res.text
+              else
+                fail(res.msg)
             (err) ->
-              console.log "We don't want your stinking opinion crybaby" + err
+              fail("5 Hundo beeyatch.  We don't want your stinking opinion" + err)
           )
 
       $scope.edit = () ->
@@ -111,6 +130,19 @@ $.app.directive('opinion', (Backend, $rootScope) ->
         $scope.opinion.editing = undefined
         if not $scope.opinion.id
           $scope.$emit('remove', $scope.opinion)
+
+      $scope.delete = () ->
+        del = confirm('Are you sure you want to delete this opinion?')
+        if del
+          Backend.delete($scope.opinion).then(
+            (res) ->
+              if res.success
+                $scope.$emit('remove', $scope.opinion)
+              else
+                fail(res.msg)
+            (err) ->
+              fail('5 Hundo.  Noooo doggy... nooooo..')
+          )
 
   }
 )

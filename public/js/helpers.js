@@ -16,4 +16,8 @@
     return "/snippets/" + name;
   };
 
+  window.fail = function(msg) {
+    return alert(msg);
+  };
+
 }).call(this);

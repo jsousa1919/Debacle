@@ -3,7 +3,7 @@
 
   SIDE_TEMPLATE = "<div class=\"col-md-5\">\n  <div class=\"row box text-center clickable {{ classes }} {{ (side.id === $parent.debate.chosen) && 'selected' || '' }}\" ng-click=\"select()\">\n    <h3>{{ side.name }}</h3>\n  </div>\n  <opinion ng-repeat=\"opinion in side.opinions | orderBy:opinion_order\"></opinion>\n</div>";
 
-  OPINION_TEMPLATE = "<div class=\"row box padded1 {{classes}}\" style=\"height: 100%\">\n  <div class=\"padded1\">\n    <b class=\"black\">{{ opinion.author }}</b>\n    -\n    <i class=\"faded\" ng-show=\"opinion.date\">posted {{ opinion.date }}</i>\n    <a class=\"pull-right\" ng-show=\"opinion.author_id == $root.globals.user.id && !opinion.editing\" ng-click=\"edit()\">Edit</a>\n  </div>\n  <div ng-hide=\"opinion.editing\" ng-bind-html=\"opinion.text | nohtml | newlines\" style=\"word-wrap: break-word;\"></div>\n  <div ng-show=\"opinion.editing\">\n    <textarea ng-model=\"opinion.new_text\" class=\"col-md-12\"></textarea>\n    <button ng-click=\"cancel()\">Cancel</button>\n    <button ng-click=\"post()\" class=\"pull-right\">Post</button>\n  </div>\n</div>";
+  OPINION_TEMPLATE = "<div class=\"row box padded1 {{classes}}\" style=\"height: 100%\">\n  <div class=\"clickable pull-right\" ng-show=\"opinion.author_id == $root.globals.user.id\" ng-click=\"delete()\">X</div>\n  <div class=\"padded1\">\n    <b class=\"black\">{{ opinion.author }}</b>\n    -\n    <i class=\"faded\" ng-show=\"opinion.date\">posted {{ opinion.date }}</i>\n    <a class=\"pull-right\" ng-show=\"opinion.author_id == $root.globals.user.id && !opinion.editing\" ng-click=\"edit()\">Edit</a>\n  </div>\n  <div ng-hide=\"opinion.editing\" ng-bind-html=\"opinion.text | nohtml | newlines\" style=\"word-wrap: break-word;\"></div>\n  <div ng-show=\"opinion.editing\">\n    <textarea ng-model=\"opinion.new_text\" class=\"col-md-12\"></textarea>\n    <button ng-click=\"cancel()\">Cancel</button>\n    <button ng-click=\"post()\" class=\"pull-right\">Post</button>\n  </div>\n</div>";
 
   $.app.filter('newlines', function() {
     return function(text) {
@@ -19,18 +19,31 @@
 
   $.app.factory('Backend', function($http, $q) {
     return {
-      vote: function(val) {
+      vote: function(opinion, val) {
         var tmp;
         tmp = $q.defer();
-        tmp.resolve(3);
+        tmp.resolve({
+          success: true,
+          score: 3
+        });
         return tmp.promise;
       },
       opine: function(opinion) {
         var tmp;
         tmp = $q.defer();
         tmp.resolve({
+          success: true,
           date: '01/01/2014',
           text: opinion.new_text
+        });
+        return tmp.promise;
+      },
+      "delete": function(opinion) {
+        var tmp;
+        tmp = $q.defer();
+        tmp.resolve({
+          success: false,
+          msg: 'Just an example of something not working'
         });
         return tmp.promise;
       }
@@ -67,19 +80,28 @@
       controller: function($scope) {
         $scope.vote = function(val) {
           return Backend.vote(opinion, val).then(function(res) {
-            return $scope.opinion.vote = res;
+            if (res.success) {
+              $scope.opinion.vote = res;
+            }
+            return {
+              "else": fail(res.msg)
+            };
           }, function(err) {
-            return console.log('Vote failed: ' + err);
+            return fail('5 Hundo: ' + err);
           });
         };
         $scope.post = function() {
           if ($scope.opinion.new_text) {
             return Backend.opine($scope.opinion).then(function(res) {
-              $scope.opinion.editing = void 0;
-              $scope.opinion.date = res.date;
-              return $scope.opinion.text = res.text;
+              if (res.success) {
+                $scope.opinion.editing = void 0;
+                $scope.opinion.date = res.date;
+                return $scope.opinion.text = res.text;
+              } else {
+                return fail(res.msg);
+              }
             }, function(err) {
-              return console.log("We don't want your stinking opinion crybaby" + err);
+              return fail("5 Hundo beeyatch.  We don't want your stinking opinion" + err);
             });
           }
         };
@@ -89,10 +111,25 @@
             return $scope.opinion.editing = true;
           }
         };
-        return $scope.cancel = function() {
+        $scope.cancel = function() {
           $scope.opinion.editing = void 0;
           if (!$scope.opinion.id) {
             return $scope.$emit('remove', $scope.opinion);
+          }
+        };
+        return $scope["delete"] = function() {
+          var del;
+          del = confirm('Are you sure you want to delete this opinion?');
+          if (del) {
+            return Backend["delete"]($scope.opinion).then(function(res) {
+              if (res.success) {
+                return $scope.$emit('remove', $scope.opinion);
+              } else {
+                return fail(res.msg);
+              }
+            }, function(err) {
+              return fail('5 Hundo.  Noooo doggy... nooooo..');
+            });
           }
         };
       }
