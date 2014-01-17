@@ -1,5 +1,7 @@
 Debacle::Application.routes.draw do
 
+  root to: "debates#index"
+
   resources :debates
 
   # The priority is based upon order of creation: first created -> highest priority.
