@@ -1,0 +1,94 @@
+/* line 5, ../../templates/sass/style.sass */
+body {
+  color: rgba(40, 40, 40, 0.8);
+}
+
+/* line 8, ../../templates/sass/style.sass */
+.centered {
+  float: none;
+  margin: auto;
+}
+
+/* line 12, ../../templates/sass/style.sass */
+.box {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
+  -webkit-box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
+  box-shadow: 0 0 3px 3px rgba(20, 20, 20, 0.7);
+}
+
+/* line 16, ../../templates/sass/style.sass */
+.neutral-color {
+  background-color: rgba(200, 50, 200, 0.5);
+}
+
+/* line 19, ../../templates/sass/style.sass */
+.side-a-color {
+  background-color: rgba(200, 50, 50, 0.5);
+}
+
+/* line 22, ../../templates/sass/style.sass */
+.side-b-color {
+  background-color: rgba(20, 50, 200, 0.5);
+}
+
+/* line 25, ../../templates/sass/style.sass */
+.selected {
+  border: 1px black;
+  -moz-box-shadow: 0 0 5px 5px yellow;
+  -webkit-box-shadow: 0 0 5px 5px yellow;
+  box-shadow: 0 0 5px 5px yellow;
+}
+
+/* line 30, ../../templates/sass/style.sass */
+.padded1 {
+  padding: 1em;
+}
+
+/* line 30, ../../templates/sass/style.sass */
+.padded2 {
+  padding: 2em;
+}
+
+/* line 30, ../../templates/sass/style.sass */
+.padded3 {
+  padding: 3em;
+}
+
+/* line 30, ../../templates/sass/style.sass */
+.padded4 {
+  padding: 4em;
+}
+
+/* line 30, ../../templates/sass/style.sass */
+.padded5 {
+  padding: 5em;
+}
+
+/* line 33, ../../templates/sass/style.sass */
+.row {
+  margin-bottom: 2em;
+}
+
+/* line 36, ../../templates/sass/style.sass */
+.faded {
+  color: rgba(20, 20, 20, 0.7);
+}
+
+/* line 39, ../../templates/sass/style.sass */
+.black {
+  color: black;
+}
+
+/* line 42, ../../templates/sass/style.sass */
+.clickable {
+  cursor: pointer;
+}
+
+/* line 45, ../../templates/sass/style.sass */
+textarea {
+  max-width: 100%;
+  min-height: 10em !important;
+}
