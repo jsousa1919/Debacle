@@ -1,18 +1,16 @@
-    <div ng-controller="Debate" id="debate" class="container">
-      <div class="row">
-        <div class="col-md-5 text-center box centered neutral-color padded2">
-          <h4 class="description">
-            {{ debate.description }}
-          </h4>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-10 centered">
-          <side object="debate.sides[active_sides[0]]" classes="side-a-color"></side>
-          <div class="col-md-2 text-center">
-            <h1 style="color: red; vertical-align: middle; display: inline; line-height: 1.5em; font-family: matura mt script capitals;">vs</h1>
-          </div>
-          <side object="debate.sides[active_sides[1]]" classes="side-b-color"></side>
-        </div>
-      </div>
-    </div>
+
+<table class="table">
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+  </tr>
+  <% @debates.each do |debate| %>
+    <tr>
+      <td><%= debate.title %></td>
+      <td><%= debate.description %></td>
+      <td><%= link_to 'Show', debate %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= link_to "New Debate", new_debate_path %>

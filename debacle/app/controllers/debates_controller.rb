@@ -2,6 +2,7 @@ class DebatesController < ApplicationController
 
   def index
     @debates = Debate.all
+    #redirect_to action: "index"
   end
 
   def new
