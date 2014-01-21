@@ -1,4 +1,6 @@
 (function() {
+  $.app = angular.module("Debacle", ["ngSanitize"]);
+
   var OPINION_TEMPLATE, SIDE_TEMPLATE;
 
   SIDE_TEMPLATE = "<div class=\"col-md-5\">\n  <div class=\"row box text-center clickable {{ classes }} {{ (side.id === $parent.debate.chosen) && 'selected' || '' }}\" ng-click=\"select()\">\n    <h3>{{ side.name }}</h3>\n  </div>\n  <opinion ng-repeat=\"opinion in side.opinions | orderBy:opinion_order\"></opinion>\n</div>";
