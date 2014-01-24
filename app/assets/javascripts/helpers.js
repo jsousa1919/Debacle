@@ -1,5 +1,4 @@
 (function() {
-
   window.cssPath = function(name) {
     return "/css/" + name;
   };

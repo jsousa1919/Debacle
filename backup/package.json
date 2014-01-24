@@ -1,0 +1,33 @@
+{
+  "name": "Debacle",
+  "version": "0.0.1",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "getobject": "*",
+    "hooker": "*",
+    "async": "*",
+    "lodash": "*",
+    "which": "*",
+    "exit": "*",
+    "underscore.string": "*",
+    "dateformat": "*",
+    "eventemitter2": "*",
+    "glob": "*",
+    "minimatch": "*",
+    "findup-sync": "*",
+    "js-yaml": "*",
+    "rimraf": "*",
+    "iconv-lite": "*",
+    "colors": "*",
+    "nopt": "*",
+    "coffee-script": "*",
+    "grunt-cli": "*",
+    "grunt": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-compass": "*",
+    "grunt-coffeelint": "*",
+    "grunt-shell": "*"
+  }
+}
