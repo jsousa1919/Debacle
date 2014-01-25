@@ -12,3 +12,17 @@ window.snippetPath = (name) ->
 
 window.fail = (msg) ->
   alert(msg)
+
+$.app.filter('newlines', () ->
+  return (text) ->
+    return text.replace(/\n/g, '<br/>')
+)
+
+$.app.filter('nohtml', () ->
+  return (text) ->
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+)
+

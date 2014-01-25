@@ -1,44 +1,3 @@
-SIDE_TEMPLATE = """
-  <div class="col-md-5">
-    <div class="row box text-center clickable {{ classes }} {{ (side.id === $parent.debate.chosen) && 'selected' || '' }}" ng-click="select()">
-      <h3>{{ side.name }}</h3>
-    </div>
-    <opinion ng-repeat="opinion in side.opinions | orderBy:opinion_order"></opinion>
-  </div>
-""" # move to external file
-
-OPINION_TEMPLATE = """
-  <div class="row box padded1 {{classes}}" style="height: 100%">
-    <div class="clickable pull-right" ng-show="opinion.author_id == $root.globals.user.id" ng-click="delete()">X</div>
-    <div class="padded1">
-      <b class="black">{{ opinion.author }}</b>
-      -
-      <i class="faded" ng-show="opinion.date">posted {{ opinion.date }}</i>
-      <a class="pull-right" ng-show="opinion.author_id == $root.globals.user.id && !opinion.editing" ng-click="edit()">Edit</a>
-    </div>
-    <div ng-hide="opinion.editing" ng-bind-html="opinion.text | nohtml | newlines" style="word-wrap: break-word;"></div>
-    <div ng-show="opinion.editing">
-      <textarea ng-model="opinion.new_text" class="col-md-12"></textarea>
-      <button ng-click="cancel()">Cancel</button>
-      <button ng-click="post()" class="pull-right">Post</button>
-    </div>
-  </div>
-""" # move to external file when on webserver
-
-
-$.app.filter('newlines', () ->
-  return (text) ->
-    return text.replace(/\n/g, '<br/>')
-)
-
-$.app.filter('nohtml', () ->
-  return (text) ->
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-)
-
 $.app.factory('Backend', ($http, $q) ->
   return {
     vote: (opinion, val) ->
@@ -87,7 +46,7 @@ $.app.directive('opinion', (Backend, $rootScope) ->
   return {
     restrict: 'E'
     replace: true
-    template: OPINION_TEMPLATE
+    templateUrl: 'snippets/_opinion.html'
     scope: true
     link: ($scope, element, attrs) ->
       if $scope.opinion.editing
@@ -150,7 +109,7 @@ $.app.directive('side', ($rootScope, Backend, $parse) ->
   return {
     restrict: 'E'
     replace: true
-    template: SIDE_TEMPLATE
+    templateUrl: 'snippets/_side.html'
     scope: true
     link: ($scope, element, attrs) ->
       $scope.side = $scope.$eval(attrs.object) # may need to use $parse to modify root object

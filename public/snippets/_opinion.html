@@ -1,0 +1,15 @@
+<div class="row box padded1 {{classes}}" style="height: 100%">
+  <div class="clickable pull-right" ng-show="opinion.author_id == $root.globals.user.id" ng-click="delete()">X</div>
+  <div class="padded1">
+    <b class="black">{{ opinion.author }}</b>
+    -
+    <i class="faded" ng-show="opinion.date">posted {{ opinion.date }}</i>
+    <a class="pull-right" ng-show="opinion.author_id == $root.globals.user.id && !opinion.editing" ng-click="edit()">Edit</a>
+  </div>
+  <div ng-hide="opinion.editing" ng-bind-html="opinion.text | nohtml | newlines" style="word-wrap: break-word;"></div>
+  <div ng-show="opinion.editing">
+    <textarea ng-model="opinion.new_text" class="col-md-12"></textarea>
+    <button ng-click="cancel()">Cancel</button>
+    <button ng-click="post()" class="pull-right">Post</button>
+  </div>
+</div>

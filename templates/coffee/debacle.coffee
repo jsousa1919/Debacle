@@ -1,5 +1,46 @@
 $.app = angular.module("Debacle", ["ngSanitize"])
 $.app.factory "DataService", ->
+  globals:
+    active_sides: [5, 6]
+    user:
+      id: 1
+      name: "Justin"
+    date: "01/01/2015"
+
+  list:
+    debates:
+      1:
+        id: 1
+        description: "Some stuff about how the two \
+          differ, popular questions, etc..."
+        chosen: 5
+        sides: {
+          5:
+            id: 5
+            name: "Python"
+            supporters: 103
+          6:
+            id: 6
+            name: "Ruby"
+            supporters: 124
+        }
+      3:
+        id: 3
+        description: "Lalalala who wears the coolest hat?"
+        sides: {
+          23:
+            id: 23
+            name: "John Wayne"
+            supporters: 5
+          107:
+            id: 107
+            name: "Matt Smith"
+            supporters: 323
+        }
+
+# Common structure between list and debates data is by design
+# less data to be loaded when going from list to debate page
+
   debate:
     description: "Some stuff about how the two \
       differ, popular questions, etc..."
@@ -51,9 +92,3 @@ $.app.factory "DataService", ->
         ]
     }
 
-  globals:
-    active_sides: [5, 6]
-    user:
-      id: 1
-      name: "Justin"
-    date: "01/01/2015"

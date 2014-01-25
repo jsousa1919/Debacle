@@ -14,7 +14,7 @@
 //= require jquery_ujs
 // require turbolinks
 //= require bootstrap
-//= require helpers
 //= require debacle
+//= require helpers
 //= require app
 //= require_tree .

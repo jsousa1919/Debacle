@@ -19,4 +19,16 @@
     return alert(msg);
   };
 
+  $.app.filter('newlines', function() {
+    return function(text) {
+      return text.replace(/\n/g, '<br/>');
+    };
+  });
+
+  $.app.filter('nohtml', function() {
+    return function(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+  });
+
 }).call(this);

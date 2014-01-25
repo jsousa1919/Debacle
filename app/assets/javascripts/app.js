@@ -1,22 +1,4 @@
 (function() {
-  var OPINION_TEMPLATE, SIDE_TEMPLATE;
-
-  SIDE_TEMPLATE = "<div class=\"col-md-5\">\n  <div class=\"row box text-center clickable {{ classes }} {{ (side.id === $parent.debate.chosen) && 'selected' || '' }}\" ng-click=\"select()\">\n    <h3>{{ side.name }}</h3>\n  </div>\n  <opinion ng-repeat=\"opinion in side.opinions | orderBy:opinion_order\"></opinion>\n</div>";
-
-  OPINION_TEMPLATE = "<div class=\"row box padded1 {{classes}}\" style=\"height: 100%\">\n  <div class=\"clickable pull-right\" ng-show=\"opinion.author_id == $root.globals.user.id\" ng-click=\"delete()\">X</div>\n  <div class=\"padded1\">\n    <b class=\"black\">{{ opinion.author }}</b>\n    -\n    <i class=\"faded\" ng-show=\"opinion.date\">posted {{ opinion.date }}</i>\n    <a class=\"pull-right\" ng-show=\"opinion.author_id == $root.globals.user.id && !opinion.editing\" ng-click=\"edit()\">Edit</a>\n  </div>\n  <div ng-hide=\"opinion.editing\" ng-bind-html=\"opinion.text | nohtml | newlines\" style=\"word-wrap: break-word;\"></div>\n  <div ng-show=\"opinion.editing\">\n    <textarea ng-model=\"opinion.new_text\" class=\"col-md-12\"></textarea>\n    <button ng-click=\"cancel()\">Cancel</button>\n    <button ng-click=\"post()\" class=\"pull-right\">Post</button>\n  </div>\n</div>";
-
-  $.app.filter('newlines', function() {
-    return function(text) {
-      return text.replace(/\n/g, '<br/>');
-    };
-  });
-
-  $.app.filter('nohtml', function() {
-    return function(text) {
-      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    };
-  });
-
   $.app.factory('Backend', function($http, $q) {
     return {
       vote: function(opinion, val) {
@@ -68,7 +50,7 @@
     return {
       restrict: 'E',
       replace: true,
-      template: OPINION_TEMPLATE,
+      templateUrl: 'snippets/_opinion.html',
       scope: true,
       link: function($scope, element, attrs) {
         if ($scope.opinion.editing) {
@@ -140,7 +122,7 @@
     return {
       restrict: 'E',
       replace: true,
-      template: SIDE_TEMPLATE,
+      templateUrl: 'snippets/_side.html',
       scope: true,
       link: function($scope, element, attrs) {
         $scope.side = $scope.$eval(attrs.object);
