@@ -16,5 +16,7 @@
 //= require bootstrap
 //= require debacle
 //= require helpers
+//= require backend
+//= require routing
 //= require app
 //= require_tree .

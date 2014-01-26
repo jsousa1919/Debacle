@@ -1,52 +1,35 @@
 (function() {
-  $.app.factory('Backend', function($http, $q) {
-    return {
-      vote: function(opinion, val) {
-        var tmp;
-        tmp = $q.defer();
-        tmp.resolve({
-          success: true,
-          score: 3
-        });
-        return tmp.promise;
-      },
-      opine: function(opinion) {
-        var tmp;
-        tmp = $q.defer();
-        tmp.resolve({
-          success: true,
-          date: '01/01/2014',
-          text: opinion.new_text
-        });
-        return tmp.promise;
-      },
-      "delete": function(opinion) {
-        var tmp;
-        tmp = $q.defer();
-        tmp.resolve({
-          success: false,
-          msg: 'Just an example of something not working'
-        });
-        return tmp.promise;
-      }
-    };
+  $.app.controller('HeadersController', function($scope, DataService) {
+    return $scope.globals = DataService.globals;
   });
 
-  $.app.controller('Main', function($rootScope, DataService) {
-    return $rootScope.globals = DataService.globals;
+  $.app.controller('ListController', function($scope, DataService, Backend) {
+    $scope.globals = DataService.globals;
+    return $scope.debates = DataService.debates;
   });
 
-  $.app.controller('Headers', function($scope, DataService) {});
-
-  $.app.controller('Debate', function($scope, DataService) {
-    $scope.debate = DataService.debate;
-    $scope.active_sides = DataService.globals.active_sides;
+  $.app.controller('DebateController', function($scope, DataService, Backend, $routeParams) {
+    $scope.globals = DataService.globals;
+    $scope.debate = DataService.debates[$routeParams.id || $scope.globals.active_debate];
+    $scope.active_sides = $scope.globals.active_sides;
     return $scope.$on('choose', function(event, side) {
       return $scope.debate.chosen = side.id;
     });
   });
 
-  $.app.directive('opinion', function(Backend, $rootScope) {
+  $.app.directive('debate', function(DataService, Backend) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'snippets/_debate.html',
+      scope: true,
+      link: function($scope, element, attrs) {
+        return $scope.debate = $scope.$eval(attrs.object);
+      }
+    };
+  });
+
+  $.app.directive('opinion', function(DataService, Backend) {
     return {
       restrict: 'E',
       replace: true,
@@ -89,7 +72,7 @@
         };
         $scope.edit = function() {
           $scope.opinion.new_text = $scope.opinion.text;
-          if ($scope.opinion.author_id === $rootScope.globals.user.id) {
+          if ($scope.opinion.author_id === $DataService.globals.user.id) {
             return $scope.opinion.editing = true;
           }
         };
@@ -118,7 +101,7 @@
     };
   });
 
-  $.app.directive('side', function($rootScope, Backend, $parse) {
+  $.app.directive('side', function(DataService, Backend, $parse) {
     return {
       restrict: 'E',
       replace: true,
@@ -152,8 +135,8 @@
           }
           $scope.side.opinions.push({
             id: 0,
-            author_id: $rootScope.globals.user.id,
-            author: $rootScope.globals.user.name,
+            author_id: DataService.globals.user.id,
+            author: DataService.globals.user.name,
             editing: true,
             "new": $scope["new"]--
           });
