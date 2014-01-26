@@ -60,7 +60,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: [
-          '<%= meta.sassPath %>/**/*.sass',
+          '<%= meta.sassPath %>/**/*.*',
           '<%= meta.coffeePath %>/**/*.coffee'
         ],
         tasks: ['coffeelint', 'compass', 'coffee']

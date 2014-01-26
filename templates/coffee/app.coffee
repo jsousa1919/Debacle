@@ -4,7 +4,24 @@ $.app.controller('HeadersController', ($scope, DataService) ->
 
 $.app.controller('ListController', ($scope, DataService, Backend) ->
   $scope.globals = DataService.globals
-  $scope.debates = DataService.debates
+  Backend.load_debate_list().then((data) ->
+    $scope.debates = data.data.debates
+  )
+)
+
+$.app.controller('CreateController', ($scope, $location, Debate)->
+  $scope.newDebate = {
+    title: '',
+    description: ''
+  }
+  $scope.share = (debate) ->
+    new_debate = new Debate({
+      title: debate.title,
+      description: debate.description
+    })
+    new_debate.$save()
+    $location.path("/")
+    $scope.newDebate.recipient = ''
 )
 
 $.app.controller('DebateController', ($scope, DataService, Backend, $routeParams) ->

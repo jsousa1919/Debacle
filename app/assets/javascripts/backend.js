@@ -28,8 +28,19 @@
           msg: 'Just an example of something not working'
         });
         return tmp.promise;
+      },
+      load_debate_list: function() {
+        return $http.get('/api/debates');
       }
     };
+  });
+
+  $.app.factory('Debate', function($resource) {
+    var Debate;
+    Debate = $resource('/api/debates/:id.json', {
+      id: '@id'
+    }, {});
+    return Debate;
   });
 
 }).call(this);
