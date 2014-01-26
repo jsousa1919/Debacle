@@ -7,6 +7,9 @@
       }).when('/debate/:id?', {
         templateUrl: 'views/debate.html',
         controller: 'DebateController'
+      }).when('/new_debate', {
+        templateUrl: 'views/new.html',
+        controller: 'DebateCreator'
       }).otherwise({
         redirectTo: '/'
       });

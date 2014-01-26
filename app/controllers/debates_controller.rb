@@ -2,6 +2,10 @@ class DebatesController < ApplicationController
 
   respond_to :json
 
+  # hack until i can get csrf working
+  protect_from_forgery :secret => 'any_phrase',  
+                        :except => :create
+
   def all
   end
 
@@ -23,11 +27,25 @@ class DebatesController < ApplicationController
   end
 
   def create
-    @debate = Debate.new(debate_params)
-    if @debate.save
-      redirect_to action: "index"
+    #@debate = Debate.new(debate_params)
+    #if @debate.save
+    #  redirect_to action: "index"
+    #else
+    #  render :new
+    #end
+    puts params
+    debate = Debate.new(debate_params)
+    if debate.save
+      render status: 200,
+        json: {
+          success: debate.persisted?,
+          debate_id: debate.id
+        }
     else
-      render :new
+      render status: 400,
+        json: {
+          success: debate.persisted?
+        }
     end
   end
 

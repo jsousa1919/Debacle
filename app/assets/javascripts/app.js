@@ -22,6 +22,27 @@
     });
   });
 
+  $.app.controller('DebateCreator', function($scope, $location, Debate){
+    $scope.newDebate = {title: '', description: ''};
+    $scope.share = function(debate) {
+      var new_debate = new Debate({
+        title: debate.title,
+        description: debate.description
+      });
+      new_debate.$save();
+      $location.path("/");
+      $scope.newDebate.recipient = '';
+    }
+  });
+
+  $.app.factory('Debate', function($resource){
+    var Debate = $resource('/api/debates/:id.json',
+      {id: '@id'},
+      {}
+    );
+    return Debate;
+  });
+
   $.app.directive('debate', function(DataService, Backend) {
     return {
       restrict: 'E',
