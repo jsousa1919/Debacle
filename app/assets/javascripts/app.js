@@ -5,7 +5,12 @@
 
   $.app.controller('ListController', function($scope, DataService, Backend) {
     $scope.globals = DataService.globals;
-    return $scope.debates = DataService.debates;
+    DataService.debate_func()
+      .then(function(data){
+        console.log(data.data.debates);
+        $scope.debates = data.data.debates;
+      });
+    //return $scope.debates = DataService.debates;
   });
 
   $.app.controller('DebateController', function($scope, DataService, Backend, $routeParams) {

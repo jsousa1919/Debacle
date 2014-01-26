@@ -9,9 +9,6 @@
     <title><%= content_for?(:title) ? yield(:title) : "Debacle" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Debacle" %>">
 
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-route.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-sanitize.js"></script>
     <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
     <%# javascript_include_tag "application", "data-turbolinks-track" => true %>
     <%= javascript_include_tag "application" %>

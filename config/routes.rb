@@ -1,8 +1,11 @@
 Debacle::Application.routes.draw do
 
-  root to: "debates#index"
+  # get '/dashboard' => 'wecome#index'
+  root to: "welcome#index"
 
-  resources :debates
+  scope '/api' do
+    resources :debates
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
