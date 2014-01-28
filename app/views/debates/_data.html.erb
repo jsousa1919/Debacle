@@ -4,6 +4,10 @@
 // This will be the only js file not in coffeescript, it will simply be an object
 //  that return a json object
 
+// On second thought, this may be better just as a reference, we can load up through
+// the API once the page is loaded.  This doesn't save too much time, complicates
+// $resource building, and gets messy as site expands.  Maybe just globals here
+
 // return {{ json(object) }} or whatever you would do in rails
   $.app.factory("DataService", function() {
     return {

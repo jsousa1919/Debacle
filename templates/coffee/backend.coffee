@@ -32,10 +32,42 @@ $.app.factory('Backend', ($http, $q) ->
 )
 
 $.app.factory('Debate', ($resource) ->
-  Debate = $resource(
+  return $resource(
     '/api/debates/:id.json',
     {id: '@id'},
     {}
   )
-  return Debate
+)
+
+$.app.factory('Comment', ($resource) ->
+  # Comment base, which covers both opinions and their subcomments
+  # opinions will have 'opinion' as 'type' and point to a 'side'
+  # comments will have 'comment' as 'type' and point to 'parent' opinion/comment
+  return $resource(
+    '/api/comments/:type/:id.json',
+    {
+      id: '@id',
+      type: '@type'
+    },
+    {
+      vote: {
+        method: 'POST',
+        params: {
+          vote: true
+        }
+      },
+      children: {
+        method: 'GET',
+        params: {
+          children: true # TODO sorting and such?
+        }
+      }
+      parent: {
+        method: 'GET',
+        params: {
+          parent: true
+        }
+      }
+    }
+  )
 )

@@ -54,7 +54,7 @@ $.app.directive('opinion', (DataService, Backend) ->
     link: ($scope, element, attrs) ->
       if $scope.opinion.editing
         $(element).hide()
-        $(element).slideDown('slow') # TODO try to use css animations
+        $(element).slideDown('slow') # TODO try to use css animations, separate DOM manipulation
         $(element).find('textarea').focus()
 
     controller: ($scope) ->

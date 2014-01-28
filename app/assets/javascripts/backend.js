@@ -36,11 +36,35 @@
   });
 
   $.app.factory('Debate', function($resource) {
-    var Debate;
-    Debate = $resource('/api/debates/:id.json', {
+    return $resource('/api/debates/:id.json', {
       id: '@id'
     }, {});
-    return Debate;
+  });
+
+  $.app.factory('Comment', function($resource) {
+    return $resource('/api/comments/:type/:id.json', {
+      id: '@id',
+      type: '@type'
+    }, {
+      vote: {
+        method: 'POST',
+        params: {
+          vote: true
+        }
+      },
+      children: {
+        method: 'GET',
+        params: {
+          children: true
+        }
+      },
+      parent: {
+        method: 'GET',
+        params: {
+          parent: true
+        }
+      }
+    });
   });
 
 }).call(this);
