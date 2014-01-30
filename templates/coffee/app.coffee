@@ -9,36 +9,55 @@ $.app.controller('ListController', ($scope, DataService, Backend) ->
   )
 )
 
-$.app.controller('CreateController', ($scope, $location, Debate)->
-  $scope.newDebate = {
-    title: '',
+$.app.controller('CreateController', ($scope, $location, Debate, DataService)->
+  $scope.globals = DataService.globals
+  $scope.debates = DataService.debates
+
+  $scope.debate = {
+    title: ''
     description: ''
+    sides: [{}, {}]
   }
+
   $scope.share = (debate) ->
-    new_debate = new Debate({
+    debate = new Debate({
       title: debate.title,
       description: debate.description
+      sides: debate.sides
     })
-    new_debate.$save()
-    $location.path("/")
-    $scope.newDebate.recipient = ''
+    $scope.debate.recipient = '' # what's this?
+    debate.$save((msg, headers) ->
+      debate.id = 5
+      # TODO debate should be updated with id here
+      $scope.debates[debate.id] = $scope.debate
+      $location.path("/debate/" + debate.id)
+    )
 )
+
 
 $.app.controller('DebateController', ($scope, DataService, Backend, $routeParams) ->
   # TODO something, something, load the debate from the backend if necessary
   $scope.globals = DataService.globals
   $scope.debate = DataService.debates[$routeParams.id || $scope.globals.active_debate]
-
-  $scope.active_sides = $scope.globals.active_sides
-  $scope.$on 'choose', (event, side) ->
-    $scope.debate.chosen = side.id
 )
 
-$.app.directive('debate', (DataService, Backend) ->
+$.app.directive('debate', () ->
   return {
     restrict: 'E'
     replace: true
     templateUrl: 'snippets/_debate.html'
+    scope: true
+    controller: ($scope) ->
+      $scope.$on 'choose', (event, side) ->
+        $scope.debate.chosen = side.id
+  }
+)
+
+$.app.directive('debateListing', (DataService, Backend) ->
+  return {
+    restrict: 'E'
+    replace: true
+    templateUrl: 'snippets/_debate_listing.html'
     scope: true
     link: ($scope, element, attrs) ->
       $scope.debate = $scope.$eval(attrs.object)
@@ -124,6 +143,7 @@ $.app.directive('side', (DataService, Backend, $parse) ->
         else
           $scope.choose()
 
+#TODO replace with $resource
       $scope.opine = () ->
         # show new opinion box
         if (o for o in $scope.side.opinions when o.editing and not o.id).length

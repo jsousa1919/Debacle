@@ -1,18 +1,1 @@
-<div ng-controller="DebateController" id="debate" class="container">
-  <div class="row">
-    <div class="col-md-5 text-center box centered neutral-color padded2">
-      <h4 class="description">
-        {{ debate.description }}
-      </h4>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-10 centered">
-      <side object="debate.sides[active_sides[0]]" classes="side-a-color"></side>
-      <div class="col-md-2 text-center">
-        <h1 style="color: red; vertical-align: middle; display: inline; line-height: 1.5em; font-family: matura mt script capitals;">vs</h1>
-      </div>
-      <side object="debate.sides[active_sides[1]]" classes="side-b-color"></side>
-    </div>
-  </div>
-</div>
+<debate object="debate"></debate>

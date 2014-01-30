@@ -10,37 +10,53 @@
     });
   });
 
-  $.app.controller('CreateController', function($scope, $location, Debate) {
-    $scope.newDebate = {
+  $.app.controller('CreateController', function($scope, $location, Debate, DataService) {
+    $scope.globals = DataService.globals;
+    $scope.debates = DataService.debates;
+    $scope.debate = {
       title: '',
-      description: ''
+      description: '',
+      sides: [{}, {}]
     };
     return $scope.share = function(debate) {
-      var new_debate;
-      new_debate = new Debate({
+      debate = new Debate({
         title: debate.title,
-        description: debate.description
+        description: debate.description,
+        sides: debate.sides
       });
-      new_debate.$save();
-      $location.path("/");
-      return $scope.newDebate.recipient = '';
+      $scope.debate.recipient = '';
+      return debate.$save(function(msg, headers) {
+        debate.id = 5;
+        $scope.debates[debate.id] = $scope.debate;
+        return $location.path("/debate/" + debate.id);
+      });
     };
   });
 
   $.app.controller('DebateController', function($scope, DataService, Backend, $routeParams) {
     $scope.globals = DataService.globals;
-    $scope.debate = DataService.debates[$routeParams.id || $scope.globals.active_debate];
-    $scope.active_sides = $scope.globals.active_sides;
-    return $scope.$on('choose', function(event, side) {
-      return $scope.debate.chosen = side.id;
-    });
+    return $scope.debate = DataService.debates[$routeParams.id || $scope.globals.active_debate];
   });
 
-  $.app.directive('debate', function(DataService, Backend) {
+  $.app.directive('debate', function() {
     return {
       restrict: 'E',
       replace: true,
       templateUrl: 'snippets/_debate.html',
+      scope: true,
+      controller: function($scope) {
+        return $scope.$on('choose', function(event, side) {
+          return $scope.debate.chosen = side.id;
+        });
+      }
+    };
+  });
+
+  $.app.directive('debateListing', function(DataService, Backend) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'snippets/_debate_listing.html',
       scope: true,
       link: function($scope, element, attrs) {
         return $scope.debate = $scope.$eval(attrs.object);

@@ -1,3 +1,18 @@
-<div class="col-md-10 box centered neutral-color padded2">
-  <a href="#debate/{{debate.id}}">{{debate.description}}</a>
+<div id="debate" class="container">
+  <div class="row">
+    <div class="col-md-5 text-center box centered neutral-color padded2">
+      <h4 class="description">
+        {{ debate.description }}
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 centered">
+      <side object="debate.sides[0]" ng-show="debate.sides[0].name" classes="side-a-color"></side>
+      <div class="col-md-2 text-center">
+        <h1 style="color: red; vertical-align: middle; display: inline; line-height: 1.5em; font-family: matura mt script capitals;">vs</h1>
+      </div>
+      <side object="debate.sides[1]" ng-show="debate.sides[1].name" classes="side-b-color"></side>
+    </div>
+  </div>
 </div>

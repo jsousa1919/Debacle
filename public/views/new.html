@@ -2,10 +2,17 @@
   <label>Create a label</label>
   <input type="text"
       placeholder="title"
-      data-ng-model="new_debate.title" >
+      data-ng-model="debate.title" >
   <input type="text"
       placeholder="description"
-      data-ng-model="new_debate.description" >
+      data-ng-model="debate.description" >
+  <input type="text"
+      placeholder="First Side"
+      data-ng-model="debate.sides[0].name">
+  <input type="text"
+      placeholder="Second Side"
+      data-ng-model="debate.sides[1].name" >
   <input type="submit" class="btn"
-      ng-click="share(new_debate)" value="Debate">
+      ng-click="share(debate)" value="Debate">
 </form>
+<debate></debate>
