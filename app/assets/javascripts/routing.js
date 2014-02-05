@@ -10,6 +10,12 @@
       }).when('/new_debate', {
         templateUrl: 'views/new.html',
         controller: 'DebateCreator'
+      }).when('/users/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginController'
+      }).when('/users/register', {
+        templateUrl: 'views/register.html',
+        controller: 'LoginController'
       }).otherwise({
         redirectTo: '/'
       });

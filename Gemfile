@@ -39,6 +39,12 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+# omniauth
+gem 'devise', '3.0.0.rc'
+gem 'omniauth'
+gem 'omniauth-stackexchange'
+gem 'uuidtools'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -49,4 +55,4 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]

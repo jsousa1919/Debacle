@@ -184,4 +184,122 @@
     };
   });
 
+  /*
+   * LOGIN STUFF
+   *
+   */
+
+  $.app.config(['$httpProvider', function($httpProvider){
+    $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
+
+    var interceptor = ['$location', '$rootScope', '$q', function($location, $rootScope, $q) {
+      function success(response) {
+        return response
+      };
+
+      function error(response) {
+        if (response.status == 401) {
+          $rootScope.$broadcast('event:unauthorized');
+          $location.path('/users/login');
+          return response;
+        };
+        return $q.reject(response);
+      };
+
+      return function(promise) {
+        return promise.then(success, error);
+      };
+    }];
+
+    $httpProvider.responseInterceptors.push(interceptor);
+  }]);
+
+        $.app.factory('Session', function($location, $http, $q) {
+          // Redirect to the given url (defaults to '/')
+          function redirect(url) {
+            url = url || '/';
+            $location.path(url);
+          }
+          var service = {
+            login: function(email, password) {
+              return $http.post('/login.json', {user: {email: email, password: password} })
+                .then(function(response) {
+                  service.currentUser = response.data.user;
+                  if (service.isAuthenticated()) {
+                    $location.path('/');
+                  }
+                });
+              },
+
+            logout: function(redirectTo) {
+              $http.post('/logout.json').then(function() {
+                service.currentUser = null;
+                redirect('/');
+              });
+            },
+
+            register: function(email, password, confirm_password) {
+              return $http.post('/users.json', {user: {email: email, password: password, password_confirmation: confirm_password} })
+                .then(function(response) {
+                  service.currentUser = response.data;
+                  if (service.isAuthenticated()) {
+                    $location.path('/');
+                }
+              });
+            },
+            requestCurrentUser: function() {
+              if (service.isAuthenticated()) {
+                return $q.when(service.currentUser);
+              } else {
+                return $http.get('/current_user').then(function(response) {
+                  service.currentUser = response.data.user;
+                  return service.currentUser;
+              });
+            }
+          },
+
+          currentUser: null,
+
+          isAuthenticated: function(){
+            return !!service.currentUser;
+          }
+        };
+        return service;
+      });
+
+  $.app.controller('LoginController', function($scope, Session){
+    $scope.login = function(user) {
+      $scope.authError = null;
+
+      Session.login(user.email, user.password)
+        .then(function(response) {
+          if (!response) {
+            $scope.authError = 'Credentials are not valid';
+          } else {
+            $scope.authError = 'Success!';
+          }
+        }, function(response) {
+          $scope.authError = 'Server offline, please try later';
+        });
+      };
+
+    $scope.logout = function(user) {
+
+      };
+
+    $scope.register = function(user) {
+      $scope.authError = null;
+
+      Session.register(user.email, user.password, user.confirm_password)
+        .then(function(response) {
+        }, function(response) {
+          var errors = '';
+          $.each(response.data.errors, function(index, value) {
+            errors += index.substr(0,1).toUpperCase()+index.substr(1) + ' ' + value + ''
+          });
+          $scope.authError = errors;
+        });
+      };
+    });
+
 }).call(this);

@@ -1,7 +1,22 @@
 Debacle::Application.routes.draw do
 
+  #devise_for :users,
+  #      :controllers => {
+  #        :omniauth_callbacks => "users/omniauth_callbacks"
+  #      }
+
+  #devise_scope :user do
+  #  get '/api/current_user' => 'users/sessions#show_current_user'
+  #end
   # get '/dashboard' => 'wecome#index'
   root to: "welcome#index"
+  # get '/auth/:provider/callback', to: 'sessions#create'
+  devise_for :users, :controllers => {registrations: 'registrations'}
+  devise_scope :user do
+    post 'login' => 'sessions#create', :as => 'login'
+    post 'logout' => 'sessions#destroy', :as => 'logout'
+    get 'current_user' => 'sessions#show_current_user', :as => 'show_current_user'
+  end
 
   scope '/api' do
     resources :debates
