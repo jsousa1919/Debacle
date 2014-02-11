@@ -1,6 +1,7 @@
 class DebatesController < ApplicationController
 
   respond_to :json
+  wrap_parameters include: [:title, :description, :sides_attributes]
 
   # hack until i can get csrf working
   protect_from_forgery :secret => 'any_phrase',  
@@ -27,13 +28,6 @@ class DebatesController < ApplicationController
   end
 
   def create
-    #@debate = Debate.new(debate_params)
-    #if @debate.save
-    #  redirect_to action: "index"
-    #else
-    #  render :new
-    #end
-    puts params
     debate = Debate.new(debate_params)
     if debate.save
       render status: 200,
@@ -57,7 +51,7 @@ class DebatesController < ApplicationController
   private
 
     def debate_params
-      params.require(:debate).permit(:title, :description)
+      params.require(:debate).permit(:title, :description, sides_attributes: [:id, :title])
     end
 
 end

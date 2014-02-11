@@ -28,8 +28,50 @@
           msg: 'Just an example of something not working'
         });
         return tmp.promise;
+      },
+      load_debate_list: function() {
+        return $http.get('/api/debates');
       }
     };
+  });
+
+  $.app.factory('Debate', function($resource) {
+    return $resource('/api/debates/:id.json', {
+      id: '@id'
+    }, {});
+  });
+
+  $.app.factory('Side', function($resource) {
+    return $resource('/api/debates/:debate_id/sides/:id.json', {
+      id: '@id',
+      debate_id: '@debate_id'
+    }, {});
+  });
+
+  $.app.factory('Comment', function($resource) {
+    return $resource('/api/comments/:type/:id.json', {
+      id: '@id',
+      type: '@type'
+    }, {
+      vote: {
+        method: 'POST',
+        params: {
+          vote: true
+        }
+      },
+      children: {
+        method: 'GET',
+        params: {
+          children: true
+        }
+      },
+      parent: {
+        method: 'GET',
+        params: {
+          parent: true
+        }
+      }
+    });
   });
 
 }).call(this);

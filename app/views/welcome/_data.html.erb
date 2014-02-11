@@ -10,7 +10,6 @@
     return {
       globals: {
         active_debate: 1,
-        active_sides: [5, 6],
         user: {
           id: 1,
           name: "Justin"
@@ -21,9 +20,9 @@
         1: {
           id: 1,
           description: "Some stuff about how the two \        differ, popular questions, etc...",
-          chosen: 5,
-          sides: {
-            5: {
+          chosen: 0,
+          sides: [
+            {
               id: 5,
               name: "Python",
               supporters: 103,
@@ -45,7 +44,7 @@
                 }
               ]
             },
-            6: {
+            {
               id: 6,
               name: "Ruby",
               supporters: 124,
@@ -74,33 +73,24 @@
                 }
               ]
             }
-          }
+          ]
         },
         3: {
           id: 3,
           description: "Lalalala who wears the coolest hat?",
-          sides: {
-            23: {
+          sides: [
+            {
               id: 23,
               name: "John Wayne",
               supporters: 5
             },
-            107: {
+            {
               id: 107,
               name: "Matt Smith",
               supporters: 323
             }
-          }
+          ]
         }
-      },
-      debate_func: function(){
-        t2_data = $q.defer();
-
-        $http.get('/api/debates').then(function(data, success){
-          t2_data.resolve(data);
-        });
-
-        return t2_data.promise;
       }
     };
   });

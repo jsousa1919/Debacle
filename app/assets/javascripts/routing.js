@@ -9,7 +9,7 @@
         controller: 'DebateController'
       }).when('/new_debate', {
         templateUrl: 'views/new.html',
-        controller: 'DebateCreator'
+        controller: 'CreateController'
       }).when('/users/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginController'

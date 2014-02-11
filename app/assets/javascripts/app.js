@@ -5,49 +5,60 @@
 
   $.app.controller('ListController', function($scope, DataService, Backend) {
     $scope.globals = DataService.globals;
-    DataService.debate_func()
-      .then(function(data){
-        console.log(data.data.debates);
-        $scope.debates = data.data.debates;
+    return Backend.load_debate_list().then(function(data) {
+      return $scope.debates = data.data.debates;
+    });
+  });
+
+  $.app.controller('CreateController', function($scope, $location, Debate, Side, DataService) {
+    $scope.globals = DataService.globals;
+    $scope.debates = DataService.debates;
+    $scope.debate = {
+      title: '',
+      description: '',
+      sides: [{}, {}]
+    };
+    return $scope.share = function(debate) {
+      debate = new Debate({
+        debate: {
+          title: debate.title,
+          description: debate.description,
+          sides_attributes: debate.sides
+        }
       });
-    //return $scope.debates = DataService.debates;
+      $scope.debate.recipient = '';
+      return debate.$save(function(msg, headers) {
+        debate.id = 5;
+        $scope.debates[debate.id] = $scope.debate;
+        return $location.path("/debate/" + debate.id);
+      });
+    };
   });
 
   $.app.controller('DebateController', function($scope, DataService, Backend, $routeParams) {
     $scope.globals = DataService.globals;
-    $scope.debate = DataService.debates[$routeParams.id || $scope.globals.active_debate];
-    $scope.active_sides = $scope.globals.active_sides;
-    return $scope.$on('choose', function(event, side) {
-      return $scope.debate.chosen = side.id;
-    });
+    return $scope.debate = DataService.debates[$routeParams.id || $scope.globals.active_debate];
   });
 
-  $.app.controller('DebateCreator', function($scope, $location, Debate){
-    $scope.newDebate = {title: '', description: ''};
-    $scope.share = function(debate) {
-      var new_debate = new Debate({
-        title: debate.title,
-        description: debate.description
-      });
-      new_debate.$save();
-      $location.path("/");
-      $scope.newDebate.recipient = '';
-    }
-  });
-
-  $.app.factory('Debate', function($resource){
-    var Debate = $resource('/api/debates/:id.json',
-      {id: '@id'},
-      {}
-    );
-    return Debate;
-  });
-
-  $.app.directive('debate', function(DataService, Backend) {
+  $.app.directive('debate', function() {
     return {
       restrict: 'E',
       replace: true,
       templateUrl: 'snippets/_debate.html',
+      scope: true,
+      controller: function($scope) {
+        return $scope.$on('choose', function(event, side) {
+          return $scope.debate.chosen = side.id;
+        });
+      }
+    };
+  });
+
+  $.app.directive('debateListing', function(DataService, Backend) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: 'snippets/_debate_listing.html',
       scope: true,
       link: function($scope, element, attrs) {
         return $scope.debate = $scope.$eval(attrs.object);
