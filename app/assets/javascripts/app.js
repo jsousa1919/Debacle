@@ -10,7 +10,7 @@
     });
   });
 
-  $.app.controller('CreateController', function($scope, $location, Debate, DataService) {
+  $.app.controller('CreateController', function($scope, $location, Debate, Side, DataService) {
     $scope.globals = DataService.globals;
     $scope.debates = DataService.debates;
     $scope.debate = {
@@ -20,9 +20,11 @@
     };
     return $scope.share = function(debate) {
       debate = new Debate({
-        title: debate.title,
-        description: debate.description,
-        sides: debate.sides
+        debate: {
+          title: debate.title,
+          description: debate.description,
+          sides_attributes: debate.sides
+        }
       });
       $scope.debate.recipient = '';
       return debate.$save(function(msg, headers) {

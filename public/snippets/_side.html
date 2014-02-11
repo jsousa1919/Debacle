@@ -1,6 +1,6 @@
 <div class="col-md-5">
   <div class="row box text-center clickable {{ classes }} {{ (side.id === $parent.debate.chosen) && 'selected' || '' }}" ng-click="select()">
-    <h3>{{ side.name }}</h3>
+    <h3>{{ side.title }}</h3>
   </div>
   <opinion ng-repeat="opinion in side.opinions | orderBy:opinion_order"></opinion>
 </div>
