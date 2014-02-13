@@ -1,3 +1,4 @@
+# TODO convert to resources
 $.app.factory('Backend', ($http, $q) ->
   return {
     vote: (opinion, val) ->
@@ -34,20 +35,24 @@ $.app.factory('Backend', ($http, $q) ->
 $.app.factory('Debate', ($resource) ->
   return $resource(
     '/api/debates/:id.json',
-    {id: '@id'},
-    {}
+    {id: '@id'}
   )
 )
 
-$.app.factory('Comment', ($resource) ->
-  # Comment base, which covers both opinions and their subcomments
-  # opinions will have 'opinion' as 'type' and point to a 'side'
-  # comments will have 'comment' as 'type' and point to 'parent' opinion/comment
+$.app.factory('DebateList', ($resource) ->
   return $resource(
-    '/api/comments/:type/:id.json',
+    '/api/debates',
+    {
+      sort: 'date'
+    }
+  )
+)
+  
+$.app.factory('Opinion', ($resource) ->
+  return $resource(
+    '/api/opinion/:id.json',
     {
       id: '@id',
-      type: '@type'
     },
     {
       vote: {
@@ -56,18 +61,22 @@ $.app.factory('Comment', ($resource) ->
           vote: true
         }
       },
-      children: {
+      comments: {
         method: 'GET',
         params: {
-          children: true # TODO sorting and such?
-        }
-      }
-      parent: {
-        method: 'GET',
-        params: {
-          parent: true
+          comments: true
         }
       }
     }
+  )
+)
+
+$.app.factory('Comment', ($resource) ->
+  return $resource(
+    '/api/comment/:id.json',
+    {
+      id: '@id',
+    },
+    {}
   )
 )

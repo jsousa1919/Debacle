@@ -3,29 +3,23 @@
     return $scope.globals = DataService.globals;
   });
 
-  $.app.controller('ListController', function($scope, DataService, Backend) {
+  $.app.controller('ListController', function($scope, DataService, Backend, DebateList) {
+    var debates;
     $scope.globals = DataService.globals;
-    return Backend.load_debate_list().then(function(data) {
-      return $scope.debates = data.data.debates;
+    return debates = DebateList.get({}, function() {
+      return $scope.debates = debates.debates;
     });
   });
 
-  $.app.controller('CreateController', function($scope, $location, Debate, Side, DataService) {
+  $.app.controller('CreateController', function($scope, $location, Debate, DataService) {
     $scope.globals = DataService.globals;
     $scope.debates = DataService.debates;
-    $scope.debate = {
+    $scope.debate = new Debate({
       title: '',
       description: '',
       sides: [{}, {}]
-    };
+    });
     return $scope.share = function(debate) {
-      debate = new Debate({
-        debate: {
-          title: debate.title,
-          description: debate.description,
-          sides_attributes: debate.sides
-        }
-      });
       $scope.debate.recipient = '';
       return debate.$save(function(msg, headers) {
         debate.id = 5;
