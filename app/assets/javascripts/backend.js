@@ -41,6 +41,13 @@
     }, {});
   });
 
+  $.app.factory('Side', function($resource) {
+    return $resource('/api/debates/:debate_id/sides/:id.json', {
+      id: '@id',
+      debate_id: '@debate_id'
+    }, {});
+  });
+
   $.app.factory('Comment', function($resource) {
     return $resource('/api/comments/:type/:id.json', {
       id: '@id',

@@ -4,7 +4,9 @@ Debacle::Application.routes.draw do
   root to: "welcome#index"
 
   scope '/api' do
-    resources :debates
+    resources :debates do
+      resources :sides
+    end
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
