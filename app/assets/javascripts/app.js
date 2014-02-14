@@ -1,9 +1,17 @@
 (function() {
-  $.app.controller('HeadersController', function($scope, DataService) {
-    return $scope.globals = DataService.globals;
+  $.app.controller('HeadersController', function($scope, DataService, Session) {
+    $scope.globals = DataService.globals
+    $scope.loggedIn = false;
+    $scope.email = null;
+    $scope.$watch(Session.isAuthenticated, function(isLoggedIn){
+      $scope.loggedIn = isLoggedIn;
+      if (Session.currentUser) {
+        $scope.email = Session.currentUser.email;
+      }
+    });
   });
 
-  $.app.controller('ListController', function($scope, DataService, Backend) {
+  $.app.controller('ListController', function($scope, DataService, Backend, Session) {
     $scope.globals = DataService.globals;
     return Backend.load_debate_list().then(function(data) {
       return $scope.debates = data.data.debates;
@@ -225,58 +233,60 @@
     $httpProvider.responseInterceptors.push(interceptor);
   }]);
 
-        $.app.factory('Session', function($location, $http, $q) {
-          // Redirect to the given url (defaults to '/')
-          function redirect(url) {
-            url = url || '/';
-            $location.path(url);
-          }
-          var service = {
-            login: function(email, password) {
-              return $http.post('/login.json', {user: {email: email, password: password} })
-                .then(function(response) {
-                  service.currentUser = response.data.user;
-                  if (service.isAuthenticated()) {
-                    $location.path('/');
-                  }
-                });
-              },
-
-            logout: function(redirectTo) {
-              $http.post('/logout.json').then(function() {
-                service.currentUser = null;
-                redirect('/');
-              });
-            },
-
-            register: function(email, password, confirm_password) {
-              return $http.post('/users.json', {user: {email: email, password: password, password_confirmation: confirm_password} })
-                .then(function(response) {
-                  service.currentUser = response.data;
-                  if (service.isAuthenticated()) {
-                    $location.path('/');
-                }
-              });
-            },
-            requestCurrentUser: function() {
+    $.app.factory('Session', function($location, $http, $q) {
+      // Redirect to the given url (defaults to '/')
+      function redirect(url) {
+        url = url || '/';
+        $location.path(url);
+      }
+      var service = {
+        login: function(email, password) {
+          return $http.post('/login.json', {user: {email: email, password: password} })
+            .then(function(response) {
+              service.currentUser = response.data.user;
               if (service.isAuthenticated()) {
-                return $q.when(service.currentUser);
-              } else {
-                return $http.get('/current_user').then(function(response) {
-                  service.currentUser = response.data.user;
-                  return service.currentUser;
-              });
-            }
+                $location.path('/');
+              }
+            });
           },
 
-          currentUser: null,
+        logout: function(redirectTo) {
+          $http.post('/logout.json').then(function() {
+            console.log('logout');
+            service.currentUser = null;
+            $.location.path('/');
+          });
+        },
 
-          isAuthenticated: function(){
-            return !!service.currentUser;
-          }
-        };
-        return service;
-      });
+        register: function(email, password, confirm_password) {
+          return $http.post('/users.json', {user: {email: email, password: password, password_confirmation: confirm_password} })
+            .then(function(response) {
+              service.currentUser = response.data;
+              if (service.isAuthenticated()) {
+                $location.path('/');
+            }
+          });
+        },
+        requestCurrentUser: function() {
+          console.log('Rquest current user');
+          if (service.isAuthenticated()) {
+            return $q.when(service.currentUser);
+          } else {
+            return $http.get('/current_user').then(function(response) {
+              service.currentUser = response.data.user;
+              return service.currentUser;
+          });
+        }
+      },
+
+      currentUser: null,
+
+      isAuthenticated: function(){
+        return !!service.currentUser;
+      }
+    };
+    return service;
+  });
 
   $.app.controller('LoginController', function($scope, Session){
     $scope.login = function(user) {

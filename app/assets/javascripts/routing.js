@@ -16,6 +16,8 @@
       }).when('/users/register', {
         templateUrl: 'views/register.html',
         controller: 'LoginController'
+      }).when('/users/logout', {
+        controller: 'LoginController'
       }).otherwise({
         redirectTo: '/'
       });
