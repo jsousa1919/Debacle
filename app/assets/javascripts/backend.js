@@ -38,20 +38,18 @@
   $.app.factory('Debate', function($resource) {
     return $resource('/api/debates/:id.json', {
       id: '@id'
-    }, {});
+    });
   });
 
-  $.app.factory('Side', function($resource) {
-    return $resource('/api/debates/:debate_id/sides/:id.json', {
-      id: '@id',
-      debate_id: '@debate_id'
-    }, {});
+  $.app.factory('DebateList', function($resource) {
+    return $resource('/api/debates', {
+      sort: 'date'
+    });
   });
 
-  $.app.factory('Comment', function($resource) {
-    return $resource('/api/comments/:type/:id.json', {
-      id: '@id',
-      type: '@type'
+  $.app.factory('Opinion', function($resource) {
+    return $resource('/api/opinion/:id.json', {
+      id: '@id'
     }, {
       vote: {
         method: 'POST',
@@ -59,16 +57,10 @@
           vote: true
         }
       },
-      children: {
+      comments: {
         method: 'GET',
         params: {
-          children: true
-        }
-      },
-      parent: {
-        method: 'GET',
-        params: {
-          parent: true
+          comments: true
         }
       }
     });
@@ -161,6 +153,10 @@
         }
       }
     };
+  $.app.factory('Comment', function($resource) {
+    return $resource('/api/comment/:id.json', {
+      id: '@id'
+    }, {});
   });
 
 }).call(this);

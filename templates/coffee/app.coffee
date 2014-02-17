@@ -2,30 +2,28 @@ $.app.controller('HeadersController', ($scope, DataService) ->
   $scope.globals = DataService.globals
 )
 
-$.app.controller('ListController', ($scope, DataService, Backend) ->
+$.app.controller('ListController', ($scope, DataService, Backend, DebateList) ->
   $scope.globals = DataService.globals
-  Backend.load_debate_list().then((data) ->
-    $scope.debates = data.data.debates
+
+#TODO turn this into a function that can send searches/filters
+  debates = DebateList.get({}, () ->
+    $scope.debates = debates.debates
   )
+    
 )
 
 $.app.controller('CreateController', ($scope, $location, Debate, DataService)->
   $scope.globals = DataService.globals
   $scope.debates = DataService.debates
 
-  $scope.debate = {
-    title: ''
+  $scope.debate = new Debate({
+    title: '',
     description: ''
     sides: [{}, {}]
-  }
+  })
 
   $scope.share = (debate) ->
-    debate = new Debate({
-      title: debate.title,
-      description: debate.description
-      sides: debate.sides
-    })
-    $scope.debate.recipient = '' # what's this?
+    $scope.debate.recipient = ''
     debate.$save((msg, headers) ->
       debate.id = 5
       # TODO debate should be updated with id here

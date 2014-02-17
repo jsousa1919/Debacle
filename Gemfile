@@ -60,3 +60,7 @@ gem 'uuidtools'
 
 # Use debugger
 gem 'debugger', group: [:development, :test]
+
+# Testing
+gem 'jasmine'
+>>>>>>> origin
