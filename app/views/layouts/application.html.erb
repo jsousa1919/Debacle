@@ -13,7 +13,7 @@
     <%# javascript_include_tag "application", "data-turbolinks-track" => true %>
     <%= javascript_include_tag "application" %>
     <script>
-      <%= render 'data' %>
+      <%#= render 'data' %>
     </script>
     <%= csrf_meta_tags %>
   </head>
@@ -41,8 +41,8 @@
               <input type="text" class="form-control" placeholder="Search Debates">
             </div>
           </form>
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown ng-hide" ng-show="loggedIn">
+          <ul class="nav navbar-nav navbar-right ng-hide" ng-show="loggedIn">
+            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ email }}<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="#">Profile</a></li>
@@ -51,8 +51,12 @@
                 <li><a href="#">Start Debate</a></li>
                 <li><a href="#">Your debates</a></li>
               </ul>
+              <li><a ng-click="logout()" href="#">Logout</a></li>
             </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right ng-hide" ng-show="!loggedIn">
             <li class="ng-hide" ng-show="!loggedIn"><a href="#users/login">login</a></li>
+          </ul>
         </div>
       </nav>
     </div>

@@ -3,6 +3,12 @@
     $scope.globals = DataService.globals
     $scope.loggedIn = false;
     $scope.email = null;
+
+    $scope.logout = function(){
+      Session.logout();
+      $scope.debates = [];
+    };
+
     $scope.$watch(Session.isAuthenticated, function(isLoggedIn){
       $scope.loggedIn = isLoggedIn;
       if (Session.currentUser) {
@@ -208,6 +214,8 @@
    *
    */
 
+  /*
+   * GET THIS TO WORK
   $.app.config(['$httpProvider', function($httpProvider){
     $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
 
@@ -232,6 +240,7 @@
 
     $httpProvider.responseInterceptors.push(interceptor);
   }]);
+  */
 
     $.app.factory('Session', function($location, $http, $q) {
       // Redirect to the given url (defaults to '/')
@@ -241,20 +250,22 @@
       }
       var service = {
         login: function(email, password) {
-          return $http.post('/login.json', {user: {email: email, password: password} })
+          // just use devise. have it convert to json
+          return $http.post('/users/sign_in.json', {user: {email: email, password: password} })
             .then(function(response) {
-              service.currentUser = response.data.user;
+              service.currentUser = response.data;
               if (service.isAuthenticated()) {
                 $location.path('/');
               }
             });
           },
 
-        logout: function(redirectTo) {
-          $http.post('/logout.json').then(function() {
-            console.log('logout');
+        logout: function() {
+          // just use devise. have it convert to json
+          $http.delete('/users/sign_out.json').then(function(response) {
             service.currentUser = null;
-            $.location.path('/');
+            this.currentUser = null;
+            $location.path('/');
           });
         },
 
@@ -305,7 +316,7 @@
       };
 
     $scope.logout = function(user) {
-
+      Session.logout();
       };
 
     $scope.register = function(user) {

@@ -3,6 +3,7 @@ class SessionsController < Devise::SessionsController
 
   def create
     resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
+    sign_in(resource_name, resource)
     render :status => 200,
       :json => { :success => true,
       :info => "Logged in",
@@ -11,8 +12,12 @@ class SessionsController < Devise::SessionsController
   end
 
   def destroy
-    warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
-    sign_out
+    #warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
+    #sign_out(resource_name)
+    puts current_user
+    #resource.destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    puts current_user
     render :status => 200,
       :json => { :success => true,
       :info => "Logged out",

@@ -4,6 +4,7 @@ class DebatesController < ApplicationController
   wrap_parameters include: [:title, :description, :sides_attributes]
 
   # hack until i can get csrf working
+  before_filter :authenticate_user!
   protect_from_forgery :secret => 'any_phrase',  
                         :except => :create
 
@@ -11,6 +12,7 @@ class DebatesController < ApplicationController
   end
 
   def index
+    #puts current_user
     @debates = Debate.all
     render status: 200,
           json: {
