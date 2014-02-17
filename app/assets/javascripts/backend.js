@@ -153,6 +153,7 @@
         }
       }
     };
+  });
   $.app.factory('Comment', function($resource) {
     return $resource('/api/comment/:id.json', {
       id: '@id'
