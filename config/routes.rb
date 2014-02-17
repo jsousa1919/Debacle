@@ -14,7 +14,7 @@ Debacle::Application.routes.draw do
   devise_for :users, :controllers => {registrations: 'registrations'}
   devise_scope :user do
     post 'login' => 'sessions#create', :as => 'login'
-    post 'logout' => 'sessions#destroy', :as => 'logout'
+    #delete 'logout' => 'sessions#destroy', :as => 'logout'
     get 'current_user' => 'sessions#show_current_user', :as => 'show_current_user'
   end
 
