@@ -11,7 +11,8 @@ Debacle::Application.routes.draw do
   # get '/dashboard' => 'wecome#index'
   root to: "welcome#index"
   # get '/auth/:provider/callback', to: 'sessions#create'
-  devise_for :users, :controllers => {registrations: 'registrations'}
+  #devise_for :users, :controllers => {registrations: 'registrations', :omniauth_callbacks => "users/omniauth_callbacks"}
+  devise_for :users, :controllers => {registrations: 'registrations', :omniauth_callbacks => "omniauth_callbacks"}
   devise_scope :user do
     post 'login' => 'sessions#create', :as => 'login'
     #delete 'logout' => 'sessions#destroy', :as => 'logout'

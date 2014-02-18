@@ -30,7 +30,7 @@
         return tmp.promise;
       },
       load_debate_list: function() {
-        return $http.get('/api/debates');
+        return $http.get('/api/debates.json');
       }
     };
   });
@@ -42,7 +42,7 @@
   });
 
   $.app.factory('DebateList', function($resource) {
-    return $resource('/api/debates', {
+    return $resource('/api/debates.json', {
       sort: 'date'
     });
   });

@@ -32,12 +32,24 @@ class SessionsController < Devise::SessionsController
   end
 
   def show_current_user
+    reject_if_not_authorized_request!
     warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
+    auth = current_user.authorizations.find_by_user_id(current_user.id)
+    #if current_user
+    #  url = .url
+    #end
     render :status => 200,
       :json => { :success => true,
       :info => "Current User",
-      :user => current_user
+      :user => current_user,
+      :auth => auth
     }
+  end
+
+  def reject_if_not_authorized_request!
+    warden.authenticate!(
+      scope: resource_name,
+      recall: "#{controller_path}#failure")
   end
 
   #def create

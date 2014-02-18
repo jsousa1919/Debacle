@@ -3,6 +3,7 @@
     $scope.globals = DataService.globals
     $scope.loggedIn = false;
     $scope.email = null;
+    $scope.name = null;
 
     $scope.logout = function(){
       Session.logout();
@@ -13,11 +14,15 @@
       $scope.loggedIn = isLoggedIn;
       if (Session.currentUser) {
         $scope.email = Session.currentUser.email;
+        $scope.name = Session.currentUser.name;
+        if (Session.auth){
+          $scope.url = Session.auth.url;
+        }
       }
     });
   });
 
-  $.app.controller('ListController', function($scope, DataService, Backend, DebateList) {
+  $.app.controller('ListController', function($scope, DataService, Backend, DebateList, Session) {
     var debates;
     $scope.globals = DataService.globals;
     return debates = DebateList.get({}, function() {
@@ -29,9 +34,11 @@
     $scope.globals = DataService.globals;
     $scope.debates = DataService.debates;
     $scope.debate = new Debate({
-      title: '',
-      description: '',
-      sides: [{}, {}]
+      debate: {
+        title: '',
+        description: '',
+        sides_attributes: [{}, {}]
+      }
     });
     return $scope.share = function(debate) {
       $scope.debate.recipient = '';
@@ -208,8 +215,6 @@
    *
    */
 
-  /*
-   * GET THIS TO WORK
   $.app.config(['$httpProvider', function($httpProvider){
     $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
 
@@ -221,7 +226,8 @@
       function error(response) {
         if (response.status == 401) {
           $rootScope.$broadcast('event:unauthorized');
-          $location.path('/users/login');
+          //don't just move to login for everything
+          //$location.path('/users/login');
           return response;
         };
         return $q.reject(response);
@@ -234,7 +240,6 @@
 
     $httpProvider.responseInterceptors.push(interceptor);
   }]);
-  */
 
     $.app.factory('Session', function($location, $http, $q) {
       // Redirect to the given url (defaults to '/')
@@ -248,6 +253,7 @@
           return $http.post('/users/sign_in.json', {user: {email: email, password: password} })
             .then(function(response) {
               service.currentUser = response.data;
+              service.auth = null;
               if (service.isAuthenticated()) {
                 $location.path('/');
               }
@@ -273,12 +279,12 @@
           });
         },
         requestCurrentUser: function() {
-          console.log('Rquest current user');
           if (service.isAuthenticated()) {
             return $q.when(service.currentUser);
           } else {
             return $http.get('/current_user').then(function(response) {
               service.currentUser = response.data.user;
+              service.auth = response.data.auth;
               return service.currentUser;
           });
         }

@@ -3,7 +3,12 @@
     '$routeProvider', function($routeProvider) {
       return $routeProvider.when('/', {
         templateUrl: 'views/list.html',
-        controller: 'ListController'
+        controller: 'ListController',
+        resolve: {
+          session: function(Session) {
+            return Session.requestCurrentUser();
+          }
+        }
       }).when('/debate/:id?', {
         templateUrl: 'views/debate.html',
         controller: 'DebateController'
