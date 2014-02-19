@@ -1,15 +1,31 @@
-$.app.controller('HeadersController', ($scope, DataService) ->
+$.app.controller('HeadersController', ($scope, DataService, Session) ->
   $scope.globals = DataService.globals
+
+  $scope.loggedIn = false
+  $scope.email = null
+  $scope.name = null
+
+  $scope.logout = () ->
+    Session.logout()
+    $scope.debates = []
+
+  $scope.$watch(Session.isAuthenticated, (isLoggedIn) ->
+    $scope.loggedIn = isLoggedIn
+    if (Session.currentUser)
+      $scope.email = Session.currentUser.email
+      $scope.name = Session.currentUser.name
+      if (Session.auth)
+        $scope.url = Session.auth.url
+  )
 )
 
-$.app.controller('ListController', ($scope, DataService, Backend, DebateList) ->
+$.app.controller('ListController', ($scope, DataService, Backend, DebateList, Session) ->
   $scope.globals = DataService.globals
 
-#TODO turn this into a function that can send searches/filters
+  #TODO turn this into a function that can send searches/filters
   debates = DebateList.get({}, () ->
     $scope.debates = debates.debates
   )
-    
 )
 
 $.app.controller('CreateController', ($scope, $location, Debate, DataService)->
@@ -17,9 +33,10 @@ $.app.controller('CreateController', ($scope, $location, Debate, DataService)->
   $scope.debates = DataService.debates
 
   $scope.debate = new Debate({
-    title: '',
-    description: ''
-    sides: [{}, {}]
+    debate:
+      title: '',
+      description: ''
+      sides_attributes: [{}, {}]
   })
 
   $scope.share = (debate) ->
@@ -170,3 +187,111 @@ $.app.directive('side', (DataService, Backend, $parse) ->
   }
 )
 
+$.app.config(['$httpProvider', ($httpProvider) ->
+  $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
+
+  interceptor = ['$location', '$rootScope', '$q', ($location, $rootScope, $q) ->
+    success = (response) ->
+      return response
+
+    error = (response) ->
+      if (response.status == 401)
+        $rootScope.$broadcast('event:unauthorized')
+        return response
+
+      $q.reject(response)
+
+    return (promise) ->
+      return promise.then(success, error)
+  ]
+
+  $httpProvider.responseInterceptors.push(interceptor)
+])
+
+$.app.factory('Session', ($location, $http, $q) ->
+  # Redirect to the given url (defaults to '/')
+  redirect = (url) ->
+    url = url || '/'
+    $location.path(url)
+
+  service =
+    login: (email, password) ->
+      # just use devise. have it convert to json
+      return $http.post('/users/sign_in.json', {user: {email: email, password: password} })
+        .then((response) ->
+          service.currentUser = response.data
+          service.auth = null
+          if (service.isAuthenticated())
+            $location.path('/')
+        )
+
+    logout: () ->
+      # just use devise. have it convert to json
+      $http.delete('/users/sign_out.json').then((response) ->
+        service.currentUser = null
+        this.currentUser = null
+        $location.path('/')
+      )
+
+    register: (email, password, confirm_password) ->
+      return $http.post('/users.json', {user: {email: email, password: password, password_confirmation: confirm_password} })
+        .then((response) ->
+          service.currentUser = response.data
+          if (service.isAuthenticated())
+            $location.path('/')
+        )
+
+    requestCurrentUser: () ->
+      if (service.isAuthenticated())
+        return $q.when(service.currentUser)
+      else
+        return $http.get('/current_user').then((response) ->
+          service.currentUser = response.data.user
+          service.auth = response.data.auth
+          return service.currentUser
+        )
+
+    currentUser: null,
+
+    isAuthenticated: () ->
+      return !!service.currentUser
+
+  return service
+)
+
+$.app.controller('LoginController', ($scope, Session) ->
+  
+  $scope.login = (user) ->
+    $scope.authError = null
+
+    Session.login(user.email, user.password)
+      .then(
+        (response) ->
+          if (!response)
+            $scope.authError = 'Credentials are not valid'
+          else
+            $scope.authError = 'Success!'
+        ,
+        (response) ->
+          $scope.authError = 'Server offline, please try later'
+      )
+
+  $scope.logout = (user) ->
+    Session.logout()
+
+  $scope.register = (user) ->
+    $scope.authError = null
+
+    Session.register(user.email, user.password, user.confirm_password)
+      .then(
+        (response) ->
+          null
+        ,
+        (response) ->
+          errors = ''
+          $.each(response.data.errors, (index, value) ->
+            errors += index.substr(0,1).toUpperCase()+index.substr(1) + ' ' + value + ''
+          )
+          $scope.authError = errors
+      )
+)
