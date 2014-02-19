@@ -47,6 +47,7 @@ end
 gem 'devise', '3.0.0.rc'
 gem 'omniauth'
 gem 'omniauth-stackexchange'
+gem 'omniauth-google-oauth2'
 gem 'uuidtools'
 
 # Use ActiveModel has_secure_password

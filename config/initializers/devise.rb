@@ -252,4 +252,5 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
   config.omniauth :stackexchange, "2550", "ueQw9WLfC)THUKj*kW3tiw((", :scope => 'no_expiry', :public_key => '4urmK9FFfAoiHjc3UhxcFQ(('
+  config.omniauth :google_oauth2, "131398104238-nmbrcc0vc5lsiu50qnde65t0bknorkv8.apps.googleusercontent.com", "vwTkqaYEgC_qsHOOcdkkQHqH"
 end
