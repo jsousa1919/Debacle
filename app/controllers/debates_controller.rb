@@ -4,7 +4,7 @@ class DebatesController < ApplicationController
   wrap_parameters include: [:title, :description, :sides_attributes]
 
   # hack until i can get csrf working
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => :index
   protect_from_forgery :secret => 'any_phrase',  
                         :except => :create
 

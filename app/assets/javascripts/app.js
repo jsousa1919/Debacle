@@ -1,23 +1,26 @@
 (function() {
   $.app.controller('HeadersController', function($scope, DataService, Session) {
-    $scope.globals = DataService.globals
+    $scope.globals = DataService.globals;
     $scope.loggedIn = false;
     $scope.email = null;
-
-    $scope.logout = function(){
+    $scope.name = null;
+    $scope.logout = function() {
       Session.logout();
-      $scope.debates = [];
+      return $scope.debates = [];
     };
-
-    $scope.$watch(Session.isAuthenticated, function(isLoggedIn){
+    return $scope.$watch(Session.isAuthenticated, function(isLoggedIn) {
       $scope.loggedIn = isLoggedIn;
       if (Session.currentUser) {
         $scope.email = Session.currentUser.email;
+        $scope.name = Session.currentUser.name;
+        if (Session.auth) {
+          return $scope.url = Session.auth.url;
+        }
       }
     });
   });
 
-  $.app.controller('ListController', function($scope, DataService, Backend, DebateList) {
+  $.app.controller('ListController', function($scope, DataService, Backend, DebateList, Session) {
     var debates;
     $scope.globals = DataService.globals;
     return debates = DebateList.get({}, function() {
@@ -29,9 +32,11 @@
     $scope.globals = DataService.globals;
     $scope.debates = DataService.debates;
     $scope.debate = new Debate({
-      title: '',
-      description: '',
-      sides: [{}, {}]
+      debate: {
+        title: '',
+        description: '',
+        sides_attributes: [{}, {}]
+      }
     });
     return $scope.share = function(debate) {
       $scope.debate.recipient = '';
@@ -203,129 +208,122 @@
     };
   });
 
-  /*
-   * LOGIN STUFF
-   *
-   */
-
-  /*
-   * GET THIS TO WORK
-  $.app.config(['$httpProvider', function($httpProvider){
-    $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
-
-    var interceptor = ['$location', '$rootScope', '$q', function($location, $rootScope, $q) {
-      function success(response) {
-        return response
-      };
-
-      function error(response) {
-        if (response.status == 401) {
-          $rootScope.$broadcast('event:unauthorized');
-          $location.path('/users/login');
-          return response;
-        };
-        return $q.reject(response);
-      };
-
-      return function(promise) {
-        return promise.then(success, error);
-      };
-    }];
-
-    $httpProvider.responseInterceptors.push(interceptor);
-  }]);
-  */
-
-    $.app.factory('Session', function($location, $http, $q) {
-      // Redirect to the given url (defaults to '/')
-      function redirect(url) {
-        url = url || '/';
-        $location.path(url);
-      }
-      var service = {
-        login: function(email, password) {
-          // just use devise. have it convert to json
-          return $http.post('/users/sign_in.json', {user: {email: email, password: password} })
-            .then(function(response) {
-              service.currentUser = response.data;
-              if (service.isAuthenticated()) {
-                $location.path('/');
-              }
-            });
-          },
-
-        logout: function() {
-          // just use devise. have it convert to json
-          $http.delete('/users/sign_out.json').then(function(response) {
-            service.currentUser = null;
-            this.currentUser = null;
-            $location.path('/');
-          });
-        },
-
-        register: function(email, password, confirm_password) {
-          return $http.post('/users.json', {user: {email: email, password: password, password_confirmation: confirm_password} })
-            .then(function(response) {
-              service.currentUser = response.data;
-              if (service.isAuthenticated()) {
-                $location.path('/');
+  $.app.config([
+    '$httpProvider', function($httpProvider) {
+      var interceptor;
+      $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
+      interceptor = [
+        '$location', '$rootScope', '$q', function($location, $rootScope, $q) {
+          var error, success;
+          success = function(response) {
+            return response;
+          };
+          error = function(response) {
+            if (response.status === 401) {
+              $rootScope.$broadcast('event:unauthorized');
+              return response;
             }
-          });
-        },
-        requestCurrentUser: function() {
-          console.log('Rquest current user');
+            return $q.reject(response);
+          };
+          return function(promise) {
+            return promise.then(success, error);
+          };
+        }
+      ];
+      return $httpProvider.responseInterceptors.push(interceptor);
+    }
+  ]);
+
+  $.app.factory('Session', function($location, $http, $q) {
+    var redirect, service;
+    redirect = function(url) {
+      url = url || '/';
+      return $location.path(url);
+    };
+    service = {
+      login: function(email, password) {
+        return $http.post('/users/sign_in.json', {
+          user: {
+            email: email,
+            password: password
+          }
+        }).then(function(response) {
+          service.currentUser = response.data;
+          service.auth = null;
           if (service.isAuthenticated()) {
-            return $q.when(service.currentUser);
-          } else {
-            return $http.get('/current_user').then(function(response) {
-              service.currentUser = response.data.user;
-              return service.currentUser;
+            return $location.path('/');
+          }
+        });
+      },
+      logout: function() {
+        return $http["delete"]('/users/sign_out.json').then(function(response) {
+          service.currentUser = null;
+          this.currentUser = null;
+          return $location.path('/');
+        });
+      },
+      register: function(email, password, confirm_password) {
+        return $http.post('/users.json', {
+          user: {
+            email: email,
+            password: password,
+            password_confirmation: confirm_password
+          }
+        }).then(function(response) {
+          service.currentUser = response.data;
+          if (service.isAuthenticated()) {
+            return $location.path('/');
+          }
+        });
+      },
+      requestCurrentUser: function() {
+        if (service.isAuthenticated()) {
+          return $q.when(service.currentUser);
+        } else {
+          return $http.get('/current_user').then(function(response) {
+            service.currentUser = response.data.user;
+            service.auth = response.data.auth;
+            return service.currentUser;
           });
         }
       },
-
       currentUser: null,
-
-      isAuthenticated: function(){
+      isAuthenticated: function() {
         return !!service.currentUser;
       }
     };
     return service;
   });
 
-  $.app.controller('LoginController', function($scope, Session){
+  $.app.controller('LoginController', function($scope, Session) {
     $scope.login = function(user) {
       $scope.authError = null;
-
-      Session.login(user.email, user.password)
-        .then(function(response) {
-          if (!response) {
-            $scope.authError = 'Credentials are not valid';
-          } else {
-            $scope.authError = 'Success!';
-          }
-        }, function(response) {
-          $scope.authError = 'Server offline, please try later';
-        });
-      };
-
+      return Session.login(user.email, user.password).then(function(response) {
+        if (!response) {
+          return $scope.authError = 'Credentials are not valid';
+        } else {
+          return $scope.authError = 'Success!';
+        }
+      }, function(response) {
+        return $scope.authError = 'Server offline, please try later';
+      });
+    };
     $scope.logout = function(user) {
-      Session.logout();
-      };
-
-    $scope.register = function(user) {
+      return Session.logout();
+    };
+    return $scope.register = function(user) {
       $scope.authError = null;
-
-      Session.register(user.email, user.password, user.confirm_password)
-        .then(function(response) {
-        }, function(response) {
-          var errors = '';
-          $.each(response.data.errors, function(index, value) {
-            errors += index.substr(0,1).toUpperCase()+index.substr(1) + ' ' + value + ''
-          });
-          $scope.authError = errors;
+      return Session.register(user.email, user.password, user.confirm_password).then(function(response) {
+        return null;
+      }, function(response) {
+        var errors;
+        errors = '';
+        $.each(response.data.errors, function(index, value) {
+          return errors += index.substr(0, 1).toUpperCase() + index.substr(1) + ' ' + value + '';
         });
-      };
-    });
+        return $scope.authError = errors;
+      });
+    };
+  });
 
 }).call(this);

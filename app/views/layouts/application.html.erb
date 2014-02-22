@@ -43,9 +43,9 @@
           </form>
           <ul class="nav navbar-nav navbar-right ng-hide" ng-show="loggedIn">
             <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ email }}<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ name || email }}<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Profile</a></li>
+                <li><a href="{{ url }}">Profile</a></li>
                 <li><a href="#">Settings</a></li>
                 <li class="divider"></li>
                 <li><a href="#">Start Debate</a></li>
@@ -56,6 +56,8 @@
           </ul>
           <ul class="nav navbar-nav navbar-right ng-hide" ng-show="!loggedIn">
             <li class="ng-hide" ng-show="!loggedIn"><a href="#users/login">login</a></li>
+            <li><a href="/users/auth/stackexchange">StackExchage</a></li>
+            <li><a href="/users/auth/google_oauth2">Google</a></li>
           </ul>
         </div>
       </nav>

@@ -30,7 +30,7 @@
         return tmp.promise;
       },
       load_debate_list: function() {
-        return $http.get('/api/debates');
+        return $http.get('/api/debates.json');
       }
     };
   });
@@ -42,7 +42,7 @@
   });
 
   $.app.factory('DebateList', function($resource) {
-    return $resource('/api/debates', {
+    return $resource('/api/debates.json', {
       sort: 'date'
     });
   });
@@ -64,6 +64,12 @@
         }
       }
     });
+  });
+
+  $.app.factory('Comment', function($resource) {
+    return $resource('/api/comment/:id.json', {
+      id: '@id'
+    }, {});
   });
 
   $.app.factory("DataService", function() {
@@ -103,8 +109,7 @@
                   text: "It's cool and stuff"
                 }
               ]
-            },
-            {
+            }, {
               id: 6,
               name: "Ruby",
               supporters: 124,
@@ -143,8 +148,7 @@
               id: 23,
               name: "John Wayne",
               supporters: 5
-            },
-            {
+            }, {
               id: 107,
               name: "Matt Smith",
               supporters: 323
@@ -153,11 +157,6 @@
         }
       }
     };
-  });
-  $.app.factory('Comment', function($resource) {
-    return $resource('/api/comment/:id.json', {
-      id: '@id'
-    }, {});
   });
 
 }).call(this);
