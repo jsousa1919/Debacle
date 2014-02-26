@@ -31,16 +31,17 @@
   $.app.controller('CreateController', function($scope, $location, Debate, DataService) {
     $scope.globals = DataService.globals;
     $scope.debates = DataService.debates;
-    $scope.debate = new Debate({
-      debate: {
-        title: '',
-        description: '',
-        sides_attributes: [{}, {}]
-      }
+    $scope.debate = {
+      title: '',
+      description: '',
+      sides_attributes: [{}, {}]
+    };
+    $scope.debate_resource = new Debate({
+      debate: $scope.debate
     });
     return $scope.share = function(debate) {
       $scope.debate.recipient = '';
-      return debate.$save(function(msg, headers) {
+      return $scope.debate_resource.$save(function(msg, headers) {
         debate.id = 5;
         $scope.debates[debate.id] = $scope.debate;
         return $location.path("/debate/" + debate.id);

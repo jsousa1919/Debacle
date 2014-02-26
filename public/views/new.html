@@ -1,17 +1,17 @@
-<form name="debateForm" ng-controller="CreateController">
+<form name="debateForm">
   <label>Create a label</label>
   <input type="text"
       placeholder="title"
-      data-ng-model="debate.debate.title" >
+      data-ng-model="debate.title" >
   <input type="text"
       placeholder="description"
-      data-ng-model="debate.debate.description" >
+      data-ng-model="debate.description" >
   <input type="text"
       placeholder="First Side"
-      data-ng-model="debate.debate.sides_attributes[0].title">
+      data-ng-model="debate.sides_attributes[0].title">
   <input type="text"
       placeholder="Second Side"
-      data-ng-model="debate.debate.sides_attributes[1].title" >
+      data-ng-model="debate.sides_attributes[1].title" >
   <input type="submit" class="btn"
       ng-click="share(debate)" value="Debate">
 </form>

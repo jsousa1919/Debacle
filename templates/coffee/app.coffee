@@ -32,16 +32,19 @@ $.app.controller('CreateController', ($scope, $location, Debate, DataService)->
   $scope.globals = DataService.globals
   $scope.debates = DataService.debates
 
-  $scope.debate = new Debate({
-    debate:
-      title: '',
-      description: ''
-      sides_attributes: [{}, {}]
+  $scope.debate = {
+    title: ''
+    description: ''
+    sides_attributes: [{}, {}]
+  }
+  
+  $scope.debate_resource = new Debate({
+    debate: $scope.debate
   })
 
   $scope.share = (debate) ->
     $scope.debate.recipient = ''
-    debate.$save((msg, headers) ->
+    $scope.debate_resource.$save((msg, headers) ->
       debate.id = 5
       # TODO debate should be updated with id here
       $scope.debates[debate.id] = $scope.debate
